@@ -1,11 +1,19 @@
 #include <iostream>
 #include <hashTable.h>
+#include <parser.hpp>
 
 int main(int argc, char const *argv[])
 {
-    HashTable hashTable(5);
-    hashTable.insert({"hello", "utzig"});
-    hashTable.insert({"key", "value"});
+    HashTable hashTable(10000);
+
+    std::ifstream f("../data/minirating.csv");
+    aria::csv::CsvParser parser(f);
+
+    for (auto &row : parser)
+    {
+        hashTable.insert({row[0], row[1]});
+    }
+
     std::cout << hashTable.getSize();
     return 0;
 }

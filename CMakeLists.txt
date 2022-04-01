@@ -1,18 +1,46 @@
 cmake_minimum_required(VERSION 3.0.0)
 
-project(FIFA21-Players VERSION 0.1.0)
+project(FIFA21-Players VERSION 0.1.0 LANGUAGES CXX)
 
 add_subdirectory(src/HashTable)
 
 add_executable(FIFA21-Players src/main.cpp)
 
+#           DOWNLOAD ALL THE SUBMODULES
+find_package(Git QUIET)
+if(GIT_FOUND AND EXISTS "${PROJECT_SOURCE_DIR}/.git")
+# Update submodules as needed
+    option(GIT_SUBMODULE "Check submodules during build" ON)
+    if(GIT_SUBMODULE)
+        message(STATUS "Submodule update")
+        execute_process(COMMAND ${GIT_EXECUTABLE} submodule update --init --recursive
+                        WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+                        RESULT_VARIABLE GIT_SUBMOD_RESULT)
+        if(NOT GIT_SUBMOD_RESULT EQUAL "0")
+            message(FATAL_ERROR "git submodule update --init failed with ${GIT_SUBMOD_RESULT}, please checkout submodules")
+        endif()
+    endif()
+endif()
+
+#           CHECK ALL THE SUBMODULES
+if(NOT EXISTS "${PROJECT_SOURCE_DIR}/external/csv-parser/parser.hpp")
+    message(FATAL_ERROR "The csv-parser submodules was not downloaded! GIT_SUBMODULE was turned off or failed. Please update submodules and try again.")
+endif()
+
+add_library( csv-parser external/csv-parser/parser.hpp)
+SET_TARGET_PROPERTIES(csv-parser PROPERTIES LINKER_LANGUAGE CXX)
+
 target_include_directories(${PROJECT_NAME} 
     PUBLIC src/HashTable
+    PUBLIC external/csv-parser
 )
 
 target_link_directories(${PROJECT_NAME} 
     PRIVATE src/HashTable
+    PUBLIC external/csv-parser
 )
 
 target_link_libraries(${PROJECT_NAME} 
-    hashTable)
+    PUBLIC hashTable
+    PUBLIC csv-parser
+)
