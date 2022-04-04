@@ -1,36 +1,96 @@
 #pragma once
 
 #include <vector>
-#include <string>
+#include <memory>
 
-
+template <typename T>
 struct HashItem
 {
-    std::string key;
-    std::string value;
-
-    bool operator==(const HashItem &item) const
-    {
-        return (key == item.key && value == item.value);
-    }
+    uint32_t key;
+    T value;
 };
 
-typedef std::vector<HashItem> HashPosition;
+template <typename T>
+using HashPosition = std::vector<HashItem<T>>;
 
+template <typename T>
 class HashTable
 {
 private:
-    HashPosition **items;
-    unsigned long capacity = 0;
-    unsigned long size = 0;
+    std::unique_ptr<HashPosition<T>[]> items;
+    size_t capacity = 0;
+    size_t size = 0;
+    size_t colisions = 0;
+    size_t maxColisions = 0;
 
 public:
-    HashTable(unsigned long capacity);
-    ~HashTable();
+    HashTable(size_t capacity)
+    {
+        this->capacity = capacity;
+        items = std::unique_ptr<HashPosition<T>[]>(new HashPosition<T>[capacity]);
+    }
 
-    unsigned long getCapacity();
-    unsigned long getSize();
-    unsigned long hash(std::string str);
-    void insert(HashItem item);
-    int search(std::string key);
+    ~HashTable()
+    {
+    }
+
+    size_t getCapacity()
+    {
+        return capacity;
+    }
+
+    size_t getSize()
+    {
+        return size;
+    }
+
+    size_t getColisions()
+    {
+        return colisions;
+    }
+
+    size_t getMaxColisions()
+    {
+        return maxColisions;
+    }
+
+    // TODO: improve hash function
+    uint32_t hash(uint32_t key)
+    {
+        uint32_t hash = key * 7;
+
+        return hash % capacity;
+    }
+
+    void insert(HashItem<T> item)
+    {
+        unsigned long index = hash(item.key);
+        if (items[index].size() > 0)
+            maxColisions = items[index].size() + 1 > maxColisions ? items[index].size() + 1 : maxColisions;
+
+        items[index].push_back(item);
+        size++;
+    }
+
+    typename HashPosition<T>::iterator find(uint32_t key)
+    {
+        uint32_t index = hash(key);
+
+        for (auto i = items[index].begin(); i != items[index].end(); ++i)
+        {
+            if (i->key == key)
+            {
+                return i;
+            }
+        }
+
+        // TODO: fix gambiarra
+        return items[0].end();
+    }
+
+    typename HashPosition<T>::iterator end()
+    {
+        // TODO: fix gambiarra
+        return items[0].end();
+    }
 };

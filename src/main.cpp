@@ -1,19 +1,21 @@
 #include <iostream>
 #include <hashTable.h>
 #include <parser.hpp>
+#include <string>
 
 int main(int argc, char const *argv[])
 {
-    HashTable hashTable(10000);
+    HashTable<std::string> hashTable(18945);
 
-    std::ifstream f("../data/minirating.csv");
+    std::ifstream f("../data/players.csv");
     aria::csv::CsvParser parser(f);
 
-    for (auto &row : parser)
+    for (auto it = ++parser.begin(); it != parser.end(); ++it)
     {
-        hashTable.insert({row[0], row[1]});
+        hashTable.insert({(uint32_t)std::stoi((*it)[0]), (*it)[1]});
     }
 
-    std::cout << hashTable.getSize();
+    if (hashTable.find(155) != hashTable.end())
+        std::cout << hashTable.find(155)->value;
     return 0;
 }
