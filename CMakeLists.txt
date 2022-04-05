@@ -3,6 +3,7 @@ cmake_minimum_required(VERSION 3.0.0)
 project(FIFA21-Players VERSION 0.1.0 LANGUAGES CXX)
 
 add_subdirectory(src/HashTable)
+add_subdirectory(src/TrieTree)
 
 add_executable(FIFA21-Players src/main.cpp)
 
@@ -32,15 +33,18 @@ SET_TARGET_PROPERTIES(csv-parser PROPERTIES LINKER_LANGUAGE CXX)
 
 target_include_directories(${PROJECT_NAME} 
     PUBLIC src/HashTable
+    PUBLIC src/TrieTree
     PUBLIC external/csv-parser
 )
 
 target_link_directories(${PROJECT_NAME} 
     PRIVATE src/HashTable
+    PRIVATE src/TrieTree
     PUBLIC external/csv-parser
 )
 
 target_link_libraries(${PROJECT_NAME} 
     PUBLIC hashTable
+    PUBLIC trieTree
     PUBLIC csv-parser
 )
