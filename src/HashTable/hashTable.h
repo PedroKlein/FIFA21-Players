@@ -4,11 +4,7 @@
 #include <memory>
 
 template <typename T>
-struct HashItem
-{
-    uint32_t key;
-    T value;
-};
+using HashItem = std::pair<uint32_t, T>;
 
 template <typename T>
 using HashPosition = std::vector<HashItem<T>>;
@@ -64,7 +60,19 @@ public:
 
     void insert(HashItem<T> item)
     {
-        unsigned long index = hash(item.key);
+        unsigned long index = hash(item.first);
+        if (items[index].size() > 0)
+            maxColisions = items[index].size() + 1 > maxColisions ? items[index].size() + 1 : maxColisions;
+
+        items[index].push_back(item);
+        size++;
+    }
+
+    template <typename... Args>
+    void emplace(Args &&...args)
+    {
+        HashItem<T> item(std::forward<Args>(args)...);
+        unsigned long index = hash(item.first);
         if (items[index].size() > 0)
             maxColisions = items[index].size() + 1 > maxColisions ? items[index].size() + 1 : maxColisions;
 
@@ -78,14 +86,13 @@ public:
 
         for (auto i = items[index].begin(); i != items[index].end(); ++i)
         {
-            if (i->key == key)
+            if (i->first == key)
             {
                 return i;
             }
         }
 
-        // TODO: fix gambiarra
-        return items[0].end();
+        return end();
     }
 
     typename HashPosition<T>::iterator end()
