@@ -58,7 +58,7 @@ public:
         return hash % capacity;
     }
 
-    void insert(HashItem<T> item)
+    typename HashPosition<T>::iterator insert(HashItem<T> item)
     {
         unsigned long index = hash(item.first);
         if (items[index].size() > 0)
@@ -66,10 +66,11 @@ public:
 
         items[index].push_back(item);
         size++;
+        return items[index].end() - 1;
     }
 
     template <typename... Args>
-    void emplace(Args &&...args)
+    typename HashPosition<T>::iterator emplace(Args &&...args)
     {
         HashItem<T> item(std::forward<Args>(args)...);
         unsigned long index = hash(item.first);
@@ -78,6 +79,7 @@ public:
 
         items[index].push_back(item);
         size++;
+        return items[index].end() - 1;
     }
 
     typename HashPosition<T>::iterator find(uint32_t key)
