@@ -19,18 +19,19 @@ int main(int argc, char const *argv[])
     std::ifstream playersFile("../data/players.csv");
     aria::csv::CsvParser playersParser(playersFile);
 
-    std::ifstream ratingsFile("../data/rating.csv");
-    aria::csv::CsvParser ratingsParser(ratingsFile);
-
     for (auto it = ++playersParser.begin(); it != playersParser.end(); ++it)
     {
-        auto row = (*it);
+        auto &row = (*it);
         uint32_t fifaID = misc::atoui(row[0].c_str());
 
         tablePlayers.emplace(fifaID, (Player){fifaID, row[1], row[2]});
 
         tablePlayersRatings.emplace(fifaID, (PlayerRating){fifaID});
     }
+    playersFile.close();
+
+    std::ifstream ratingsFile("../data/rating.csv");
+    aria::csv::CsvParser ratingsParser(ratingsFile);
 
     for (auto it = ++ratingsParser.begin(); it != ratingsParser.end(); ++it)
     {
@@ -49,8 +50,10 @@ int main(int argc, char const *argv[])
         if (user == tableUserRatings.end())
             user = tableUserRatings.emplace(userID, (User){userID});
 
-        user->second.ratings.push_back((UserRating){fifaID, rating});
+        user->second.ratings.emplace_back((UserRating){fifaID, rating});
     }
+
+    ratingsFile.close();
 
     auto t2 = std::chrono::high_resolution_clock::now();
 
