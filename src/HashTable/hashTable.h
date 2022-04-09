@@ -4,11 +4,7 @@
 #include <memory>
 
 template <typename T>
-struct HashItem
-{
-    uint32_t key;
-    T value;
-};
+using HashItem = std::pair<uint32_t, T>;
 
 template <typename T>
 using HashPosition = std::vector<HashItem<T>>;
@@ -24,7 +20,7 @@ private:
     size_t maxColisions = 0;
 
 public:
-    HashTable(size_t capacity)
+    HashTable(const size_t &capacity)
     {
         this->capacity = capacity;
         items = std::unique_ptr<HashPosition<T>[]>(new HashPosition<T>[capacity]);
@@ -55,42 +51,54 @@ public:
     }
 
     // TODO: improve hash function
-    uint32_t hash(uint32_t key)
+    uint32_t hash(const uint32_t &key)
     {
         uint32_t hash = key * 7;
 
         return hash % capacity;
     }
 
-    void insert(HashItem<T> item)
+    typename HashPosition<T>::iterator insert(HashItem<T> item)
     {
-        unsigned long index = hash(item.key);
+        unsigned long index = hash(item.first);
         if (items[index].size() > 0)
             maxColisions = items[index].size() + 1 > maxColisions ? items[index].size() + 1 : maxColisions;
 
         items[index].push_back(item);
         size++;
+        return items[index].end() - 1;
     }
 
-    typename HashPosition<T>::iterator find(uint32_t key)
+    template <typename... Args>
+    typename HashPosition<T>::iterator emplace(Args &&...args)
+    {
+        HashItem<T> item(std::forward<Args>(args)...);
+        unsigned long index = hash(item.first);
+        if (items[index].size() > 0)
+            maxColisions = items[index].size() + 1 > maxColisions ? items[index].size() + 1 : maxColisions;
+
+        items[index].push_back(item);
+        size++;
+        return items[index].end() - 1;
+    }
+
+    typename HashPosition<T>::iterator find(const uint32_t &key)
     {
         uint32_t index = hash(key);
 
         for (auto i = items[index].begin(); i != items[index].end(); ++i)
         {
-            if (i->key == key)
+            if (i->first == key)
             {
                 return i;
             }
         }
 
-        // TODO: fix gambiarra
-        return items[0].end();
+        return end();
     }
 
     typename HashPosition<T>::iterator end()
     {
-        // TODO: fix gambiarra
-        return items[0].end();
+        return items[capacity - 1].end();
     }
 };

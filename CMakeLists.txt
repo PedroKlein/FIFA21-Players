@@ -2,9 +2,9 @@ cmake_minimum_required(VERSION 3.0.0)
 
 project(FIFA21-Players VERSION 0.1.0 LANGUAGES CXX)
 
-add_subdirectory(src/HashTable)
+FILE(GLOB_RECURSE SOURCES src/*)
 
-add_executable(FIFA21-Players src/main.cpp)
+add_executable(${PROJECT_NAME} ${SOURCES})
 
 #           DOWNLOAD ALL THE SUBMODULES
 find_package(Git QUIET)
@@ -31,16 +31,13 @@ add_library( csv-parser external/csv-parser/parser.hpp)
 SET_TARGET_PROPERTIES(csv-parser PROPERTIES LINKER_LANGUAGE CXX)
 
 target_include_directories(${PROJECT_NAME} 
-    PUBLIC src/HashTable
     PUBLIC external/csv-parser
 )
 
 target_link_directories(${PROJECT_NAME} 
-    PRIVATE src/HashTable
     PUBLIC external/csv-parser
 )
 
 target_link_libraries(${PROJECT_NAME} 
-    PUBLIC hashTable
     PUBLIC csv-parser
 )
