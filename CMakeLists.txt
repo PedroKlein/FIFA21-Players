@@ -27,8 +27,8 @@ if(NOT EXISTS "${PROJECT_SOURCE_DIR}/external/csv-parser/parser.hpp")
     message(FATAL_ERROR "The csv-parser submodules was not downloaded! GIT_SUBMODULE was turned off or failed. Please update submodules and try again.")
 endif()
 
-add_library( csv-parser external/csv-parser/parser.hpp)
-SET_TARGET_PROPERTIES(csv-parser PROPERTIES LINKER_LANGUAGE CXX)
+add_library( csv-parser INTERFACE external/csv-parser/parser.hpp)
+# SET_TARGET_PROPERTIES(csv-parser PROPERTIES LINKER_LANGUAGE CXX)
 
 target_include_directories(${PROJECT_NAME} 
     PUBLIC external/csv-parser
@@ -41,3 +41,5 @@ target_link_directories(${PROJECT_NAME}
 target_link_libraries(${PROJECT_NAME} 
     PUBLIC csv-parser
 )
+
+set_target_properties(${PROJECT_NAME} PROPERTIES CXX_STANDARD 17)

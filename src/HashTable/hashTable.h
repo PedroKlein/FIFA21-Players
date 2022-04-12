@@ -70,14 +70,14 @@ public:
     }
 
     template <typename... Args>
-    typename HashPosition<T>::iterator emplace(Args &&...args)
+    typename HashPosition<T>::iterator emplace(uint32_t key, Args &&...args)
     {
-        HashItem<T> item(std::forward<Args>(args)...);
-        unsigned long index = hash(item.first);
+        // HashItem<T> item(key, std::forward<Args>(args)...);
+        unsigned long index = hash(key);
         if (items[index].size() > 0)
             maxColisions = items[index].size() + 1 > maxColisions ? items[index].size() + 1 : maxColisions;
 
-        items[index].push_back(item);
+        items[index].emplace_back(key, std::forward<Args>(args)...);
         size++;
         return items[index].end() - 1;
     }

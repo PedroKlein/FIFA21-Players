@@ -24,9 +24,12 @@ int main(int argc, char const *argv[])
         auto &row = (*it);
         uint32_t fifaID = misc::atoui(row[0].c_str());
 
-        tablePlayers.emplace(fifaID, (Player){fifaID, row[1], row[2]});
+        auto &name = row[1];
+        auto &positions = row[2];
 
-        tablePlayersRatings.emplace(fifaID, (PlayerRating){fifaID});
+        tablePlayers.emplace(fifaID, (Player){fifaID,name.c_str(), positions.c_str()});
+
+        tablePlayersRatings.emplace(fifaID, fifaID);
     }
     playersFile.close();
 
@@ -48,9 +51,9 @@ int main(int argc, char const *argv[])
         }
 
         if (user == tableUserRatings.end())
-            user = tableUserRatings.emplace(userID, (User){userID});
+            user = tableUserRatings.emplace(userID, userID);
 
-        user->second.ratings.emplace_back((UserRating){fifaID, rating});
+        user->second.ratings.emplace_back( fifaID, rating);
     }
 
     ratingsFile.close();
@@ -58,47 +61,47 @@ int main(int argc, char const *argv[])
     auto t2 = std::chrono::high_resolution_clock::now();
 
     // test
-    auto player = tablePlayers.find(231747);
-    auto user = tableUserRatings.find(66782);
-    if (player != tablePlayers.end())
-    {
-        auto rating = tablePlayersRatings.find(player->second.fifaID);
-        if (rating != tablePlayersRatings.end())
-        {
-            std::cout << "\tsofifa_id "
-                      << "\tname"
-                      << "\tplayer_positions"
-                      << "\trating: "
-                      << "\tcount" << std::endl;
-            std::cout << "\t" << player->second.fifaID
-                      << "\t " << player->second.name
-                      << "\t " << player->second.positions
-                      << "\t " << rating->second.rating
-                      << "\t " << rating->second.count << std::endl;
-        }
-    }
+    // auto player = tablePlayers.find(231747);
+    // auto user = tableUserRatings.find(66782);
+    // if (player != tablePlayers.end())
+    // {
+    //     auto rating = tablePlayersRatings.find(player->second.fifaID);
+    //     if (rating != tablePlayersRatings.end())
+    //     {
+    //         std::cout << "\tsofifa_id "
+    //                   << "\tname"
+    //                   << "\tplayer_positions"
+    //                   << "\trating: "
+    //                   << "\tcount" << std::endl;
+    //         std::cout << "\t" << player->second.fifaID
+    //                   << "\t " << player->second.name
+    //                   << "\t " << player->second.positions
+    //                   << "\t " << rating->second.rating
+    //                   << "\t " << rating->second.count << std::endl;
+    //     }
+    // }
 
-    if (user != tableUserRatings.end())
-    {
-        std::cout << "\tsofifa_id "
-                  << "\tname"
-                  << "\tglobal_rating"
-                  << "\tcount"
-                  << "\trating" << std::endl;
-        for (auto &&rate : user->second.ratings)
-        {
-            auto rating = tablePlayersRatings.find(rate.fifaID);
-            auto player = tablePlayers.find(rate.fifaID);
+    // if (user != tableUserRatings.end())
+    // {
+    //     std::cout << "\tsofifa_id "
+    //               << "\tname"
+    //               << "\tglobal_rating"
+    //               << "\tcount"
+    //               << "\trating" << std::endl;
+    //     for (auto &&rate : user->second.ratings)
+    //     {
+    //         auto rating = tablePlayersRatings.find(rate.fifaID);
+    //         auto player = tablePlayers.find(rate.fifaID);
 
-            std::cout << "\t " << player->second.fifaID
-                      << "\t " << player->second.name
-                      << "\t " << rating->second.rating
-                      << "\t " << rating->second.count
-                      << "\t " << rate.rating
+    //         std::cout << "\t " << player->second.fifaID
+    //                   << "\t " << player->second.name
+    //                   << "\t " << rating->second.rating
+    //                   << "\t " << rating->second.count
+    //                   << "\t " << rate.rating
 
-                      << std::endl;
-        }
-    }
+    //                   << std::endl;
+    //     }
+    // }
 
     auto ms_int = std::chrono::duration_cast<std::chrono::milliseconds>(t2 - t1) / 1000.;
     std::cout << ms_int.count() << "s\n";
