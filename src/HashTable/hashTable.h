@@ -20,7 +20,7 @@ private:
     size_t maxColisions = 0;
 
 public:
-    HashTable(const size_t &capacity)
+    HashTable(size_t capacity)
     {
         this->capacity = capacity;
         items = std::unique_ptr<HashPosition<T>[]>(new HashPosition<T>[capacity]);
@@ -82,7 +82,7 @@ public:
         return items[index].end() - 1;
     }
 
-    typename HashPosition<T>::iterator find(const uint32_t &key)
+    std::pair<typename HashPosition<T>::iterator, bool> find(const uint32_t &key)
     {
         uint32_t index = hash(key);
 
@@ -90,11 +90,11 @@ public:
         {
             if (i->first == key)
             {
-                return i;
+                return {i, true};
             }
         }
 
-        return end();
+        return {end(), false};
     }
 
     typename HashPosition<T>::iterator end()

@@ -8,9 +8,9 @@ struct UserRating
     uint32_t fifaID;
     float rating;
 
-    UserRating(uint32_t fifaID, float rating) : fifaID(fifaID), rating(rating)
-    {
-    }
+    UserRating(uint32_t fifaID, float rating)
+        : fifaID(fifaID),
+          rating(rating) {}
 };
 
 struct User

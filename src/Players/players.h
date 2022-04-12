@@ -26,6 +26,6 @@ struct PlayerRating
     void addRating(float rating)
     {
         count++;
-        this->rating = (this->rating + rating) / 2.;
+        this->rating = (this->rating + rating) / 2.f;
     }
 };
