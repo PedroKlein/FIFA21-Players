@@ -1,30 +1,44 @@
+#pragma once
 
-
+#include <vector>
 template <typename HashTableType>
 class HashTableIterator
 {
 public:
     using Iterator = HashTableIterator<HashTableType>;
+
     using IteratorCategory = std::forward_iterator_tag;
     using ValueType = typename HashTableType::ValueType;
+    using DataStructType = typename std::vector<std::pair<uint32_t, ValueType>>;
+    using VectorIterator = typename std::vector<std::pair<uint32_t, ValueType>>::iterator;
+
+    using DataStructPointer = DataStructType *;
+    using DataStructReference = DataStructType &;
+
     using PointerType = ValueType *;
     using ReferenceType = ValueType &;
+
     using DifferenceType = std::ptrdiff_t;
 
 public:
-    HashTableIterator(PointerType ptr)
-        : mPtr(ptr) {}
+    HashTableIterator(DataStructPointer ptr, VectorIterator vecIt)
+        : mPtr(ptr),
+          vectorIterator(vecIt) {}
     ~HashTableIterator() {}
 
     Iterator &operator++()
     {
-        mPtr++;
+        if (vectorIterator == mPtr->end())
+            mPtr++;
+
+        vectorIterator++;
+
         return *this;
     }
 
     Iterator operator++(int)
     {
-        HashTableIterator iterator = *this;
+        Iterator iterator = *this;
         ++(*this);
         return iterator;
     }
@@ -37,19 +51,20 @@ public:
 
     Iterator operator--(int)
     {
-        HashTableIterator iterator = *this;
+        Iterator iterator = *this;
         --(*this);
         return iterator;
     }
 
-    PointerType operator->()
-    {
-        return mPtr;
-    }
+    // PointerType operator->()
+    // {
+    //     vectorIterator->
+    //     return dynamic_cast<PointerType>(*(vectorIterator->second));
+    // }
 
     ReferenceType operator*()
     {
-        return *mPtr;
+        return vectorIterator->second;
     }
 
     bool operator==(const HashTableIterator &other) const
@@ -63,5 +78,6 @@ public:
     }
 
 protected:
-    PointerType mPtr;
+    DataStructPointer mPtr;
+    VectorIterator vectorIterator;
 };
