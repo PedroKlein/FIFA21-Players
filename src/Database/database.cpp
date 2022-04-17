@@ -7,7 +7,7 @@ Database::Database()
 {
     Timer timer;
 
-    std::ifstream playersFile("../../data/players.csv");
+    std::ifstream playersFile(PLAYERS_CSV);
     aria::csv::CsvParser playersParser(playersFile);
 
     for (auto it = ++playersParser.begin(); it != playersParser.end(); ++it)
@@ -24,7 +24,7 @@ Database::Database()
     }
     playersFile.close();
 
-    std::ifstream ratingsFile("../../data/rating.csv");
+    std::ifstream ratingsFile(RATING_CSV);
     aria::csv::CsvParser ratingsParser(ratingsFile);
 
     for (auto it = ++ratingsParser.begin(); it != ratingsParser.end(); ++it)
