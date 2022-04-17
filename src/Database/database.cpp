@@ -30,16 +30,16 @@ Database::Database()
         uint32_t userID = misc::atoui((*it)[0].c_str());
         float rating = misc::atof((*it)[2].c_str());
 
-        auto [user, userFound] = tableUserRatings.find(userID);
-        auto [player, playerFound] = tablePlayersRatings.find(fifaID);
+        auto userIt = tableUserRatings.find(userID);
+        auto playerIt = tablePlayersRatings.find(fifaID);
 
-        if (playerFound)
-            player->addRating(rating);
+        if (playerIt != tablePlayersRatings.end())
+            playerIt->second.addRating(rating);
 
-        if (!userFound)
-            user = tableUserRatings.emplace(userID, userID);
-
-        user->ratings.emplace_back(fifaID, rating);
+        if (userIt != tableUserRatings.end())
+            userIt = tableUserRatings.emplace(userID, userID);
+        // TODO: segmentation fault after reading from iterator;
+        userIt->second.ratings.emplace_back(fifaID, rating);
     }
 
     ratingsFile.close();

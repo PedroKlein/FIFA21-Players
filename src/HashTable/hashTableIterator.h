@@ -1,19 +1,19 @@
 #pragma once
 
 #include <vector>
-template <typename HashTableType>
+#include <memory>
+
+template <typename HashTableType, size_t N>
 class HashTableIterator
 {
 public:
-    using Iterator = HashTableIterator<HashTableType>;
+    using Iterator = HashTableIterator<HashTableType, N>;
 
     using IteratorCategory = std::forward_iterator_tag;
-    using ValueType = typename HashTableType::ValueType;
-    using DataStructType = typename std::vector<std::pair<uint32_t, ValueType>>;
-    using VectorIterator = typename std::vector<std::pair<uint32_t, ValueType>>::iterator;
+    using ValueType = typename HashTableType::HashItem;
 
-    using DataStructPointer = DataStructType *;
-    using DataStructReference = DataStructType &;
+    using DataStructType = typename HashTableType::HashPosition;
+    using VectorIterator = typename DataStructType::iterator;
 
     using PointerType = ValueType *;
     using ReferenceType = ValueType &;
@@ -21,17 +21,22 @@ public:
     using DifferenceType = std::ptrdiff_t;
 
 public:
-    HashTableIterator(DataStructPointer ptr, VectorIterator vecIt)
+    HashTableIterator(std::unique_ptr<DataStructType[]> &ptr, size_t i, VectorIterator vecIt)
         : mPtr(ptr),
+          index(i),
           vectorIterator(vecIt) {}
     ~HashTableIterator() {}
 
     Iterator &operator++()
     {
-        if (vectorIterator == mPtr->end())
-            mPtr++;
+        if (index == N)
+            return *this;
 
-        vectorIterator++;
+        if (vectorIterator != mPtr[index].end())
+            vectorIterator++;
+
+        while (vectorIterator == mPtr[index].end() && index != N)
+            vectorIterator = mPtr[++index].begin();
 
         return *this;
     }
@@ -43,33 +48,19 @@ public:
         return iterator;
     }
 
-    Iterator &operator--()
+    PointerType operator->()
     {
-        mPtr--;
-        return *this;
+        return &*vectorIterator;
     }
-
-    Iterator operator--(int)
-    {
-        Iterator iterator = *this;
-        --(*this);
-        return iterator;
-    }
-
-    // PointerType operator->()
-    // {
-    //     vectorIterator->
-    //     return dynamic_cast<PointerType>(*(vectorIterator->second));
-    // }
 
     ReferenceType operator*()
     {
-        return vectorIterator->second;
+        return (*vectorIterator);
     }
 
     bool operator==(const HashTableIterator &other) const
     {
-        return mPtr == other.mPtr;
+        return vectorIterator == other.vectorIterator;
     }
 
     bool operator!=(const HashTableIterator &other) const
@@ -78,6 +69,7 @@ public:
     }
 
 protected:
-    DataStructPointer mPtr;
+    std::unique_ptr<DataStructType[]> &mPtr;
+    size_t index;
     VectorIterator vectorIterator;
 };

@@ -16,12 +16,11 @@
 #define RATING_CSV "../data/rating.csv"
 #endif
 
-#define RATING_CSV "../../data/rating.csv"
 #define MINIRATING_CSV "../data/minirating.csv"
 #define TAGS_CSV "../data/tags.csv"
 
-const size_t TOTAL_PLAYERS = 18945;
-const size_t TOTAL_USERS = 138493; // check
+const size_t TOTAL_PLAYERS = 18945u;
+const size_t TOTAL_USERS = 138493u; // check
 
 class Database
 {

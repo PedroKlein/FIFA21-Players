@@ -4,31 +4,27 @@
 #include <memory>
 #include "hashTableIterator.h"
 
-template <typename T>
-using HashItem = std::pair<uint32_t, T>;
-
-template <typename T>
-using HashPosition = std::vector<HashItem<T>>;
-
 template <typename T, size_t N>
 class HashTable
 {
+public:
+    using Iterator = HashTableIterator<HashTable<T, N>, N>;
+    using ValueType = T;
+    using HashItem = std::pair<uint32_t, T>;
+    using HashPosition = std::vector<HashItem>;
+
 private:
-    std::unique_ptr<HashPosition<T>[]> items;
+    std::unique_ptr<HashPosition[]> items;
     size_t capacity = 0;
     size_t size = 0;
     size_t colisions = 0;
     size_t maxColisions = 0;
 
 public:
-    using Iterator = HashTableIterator<HashTable<T, N>>;
-    using ValueType = T;
-
-public:
     HashTable()
     {
         this->capacity = N;
-        items = std::make_unique<HashPosition<T>[]>(N);
+        items = std::make_unique<HashPosition[]>(N);
     }
 
     ~HashTable()
@@ -56,59 +52,62 @@ public:
     }
 
     // TODO: improve hash function
-    uint32_t hash(const uint32_t &key)
+    size_t hash(const uint32_t &key)
     {
         uint32_t hash = key * 7;
 
         return hash % capacity;
     }
 
-    Iterator insert(HashItem<T> item)
+    Iterator insert(HashItem item)
     {
-        unsigned long index = hash(item.first);
-        if (items[index].size() > 0)
-            maxColisions = items[index].size() + 1 > maxColisions ? items[index].size() + 1 : maxColisions;
+        auto index = hash(item.first);
+        // if (items[index].size() > 0)
+        //     maxColisions = items[index].size() + 1 > maxColisions ? items[index].size() + 1 : maxColisions;
 
         items[index].push_back(item);
         size++;
-        return &(items[index].back().second);
+        return Iterator(items, index, items[index].end() - 1);
     }
 
     template <typename... Args>
     Iterator emplace(uint32_t key, Args &&...args)
     {
         // HashItem<T> item(key, std::forward<Args>(args)...);
-        unsigned long index = hash(key);
-        if (items[index].size() > 0)
-            maxColisions = items[index].size() + 1 > maxColisions ? items[index].size() + 1 : maxColisions;
+        auto index = hash(key);
+        // if (items[index].size() > 0)
+        //     maxColisions = items[index].size() + 1 > maxColisions ? items[index].size() + 1 : maxColisions;
 
         items[index].emplace_back(key, std::forward<Args>(args)...);
         size++;
-        return &(items[index].back().second);
+        return Iterator(items, index, items[index].end() - 1);
     }
 
-    std::pair<Iterator, bool> find(const uint32_t &key)
+    Iterator find(const uint32_t &key)
     {
-        uint32_t index = hash(key);
+        auto index = hash(key);
 
         for (auto i = items[index].begin(); i != items[index].end(); ++i)
         {
             if (i->first == key)
             {
-                return {&(i->second), true};
+                return Iterator(items, index, i);
             }
         }
 
-        return {nullptr, false};
+        return end();
     }
 
     Iterator begin()
     {
-        return Iterator(&(items[0][0]->second));
+        auto it = Iterator(items, 0, items[0].begin());
+        if (items[0].begin() == items[0].end())
+            it++;
+        return it;
     }
 
     Iterator end()
     {
-        return nullptr;
+        return Iterator(items, N, items[N - 1].end());
     }
 };
