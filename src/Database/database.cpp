@@ -1,5 +1,7 @@
 #include "database.h"
 
+// #include <algorithm> // TODO: implement sort
+
 Database::Database()
     : tablePlayers(TOTAL_PLAYERS),
       tablePlayersRatings(TOTAL_PLAYERS),
@@ -52,4 +54,35 @@ Database::Database()
 
 Database::~Database()
 {
+}
+
+std::vector<UserSearch> Database::userSearch(uint32_t id)
+{
+    auto [user, userFound] = tableUserRatings.find(id);
+
+    if (!userFound)
+        throw;
+
+    std::vector<UserSearch> res;
+
+    auto ratings = user->second.ratings;
+
+    // std::sort(ratings.begin(), ratings.end());
+
+    int i = 0;
+    for (auto &&rating : ratings)
+    {
+
+        auto [playerRating, playerRatingFound] = tablePlayersRatings.find(rating.fifaID);
+        auto [player, playerFound] = tablePlayers.find(rating.fifaID);
+
+        if (!playerFound || !playerRatingFound)
+            throw;
+
+        res.push_back(UserSearch(player->second, playerRating->second, rating.rating));
+        i++;
+        if (i == 20)
+            break;
+    }
+    return res;
 }

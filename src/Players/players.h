@@ -1,14 +1,15 @@
 #pragma once
 
+#include <string>
 #include <stdint.h>
 
 struct Player
 {
     uint32_t fifaID;
-    const char* name;
-    const char* positions;
+    std::string name;
+    std::string positions;
 
-    Player(uint32_t fifaID, const char* name, const char* positions)
+    Player(uint32_t fifaID, std::string name, std::string positions)
         : fifaID(fifaID),
           name(name),
           positions(positions) {}

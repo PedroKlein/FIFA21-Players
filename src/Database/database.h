@@ -2,6 +2,7 @@
 
 #include <stdint.h>
 #include <parser.hpp>
+#include "./searchStructs.h"
 #include "../Timer/timer.h"
 #include "../HashTable/hashTable.h"
 #include "../User/user.h"
@@ -12,8 +13,8 @@
 #define PLAYERS_CSV "../../data/players.csv"
 #define RATING_CSV "../../data/rating.csv"
 #else
-#define PLAYERS_CSV "../data/players.csv"
-#define RATING_CSV "../data/rating.csv"
+#define PLAYERS_CSV "../../data/players.csv"
+#define RATING_CSV "../../data/rating.csv"
 #endif
 
 #define MINIRATING_CSV "../data/minirating.csv"
@@ -33,4 +34,6 @@ private:
 public:
     Database();
     ~Database();
+
+    std::vector<UserSearch> userSearch(uint32_t id);
 };
