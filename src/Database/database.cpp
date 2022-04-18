@@ -50,6 +50,36 @@ Database::Database()
     ratingsFile.close();
 }
 
-Database::~Database()
+Database::~Database() {}
+
+std::vector<UserSearch> Database::userSearch(uint32_t id)
 {
+    Timer timer;
+    auto [user, userFound] = tableUserRatings.find(id);
+
+    if (!userFound)
+        throw;
+
+    auto &ratings = user->second.ratings;
+    std::vector<UserSearch> res;
+    res.reserve(ratings.size() >= 20 ? 20 : ratings.size());
+
+    misc::sort(ratings.begin(), ratings.end(), std::greater<UserRating>());
+
+    int i = 0;
+    for (auto &&rating : ratings)
+    {
+
+        auto [playerRating, playerRatingFound] = tablePlayersRatings.find(rating.fifaID);
+        auto [player, playerFound] = tablePlayers.find(rating.fifaID);
+
+        if (!playerFound || !playerRatingFound)
+            throw;
+
+        res.emplace_back(UserSearch(player->second, playerRating->second, rating.rating));
+        i++;
+        if (i == 20)
+            break;
+    }
+    return res;
 }
