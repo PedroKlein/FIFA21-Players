@@ -1,6 +1,6 @@
 #include "database.h"
 
-// #include <algorithm> // TODO: implement sort
+#include <algorithm> // TODO: implement sort
 
 Database::Database()
     : tablePlayers(TOTAL_PLAYERS),
@@ -52,22 +52,22 @@ Database::Database()
     ratingsFile.close();
 }
 
-Database::~Database()
-{
-}
+Database::~Database() {}
 
 std::vector<UserSearch> Database::userSearch(uint32_t id)
 {
+    Timer timer;
     auto [user, userFound] = tableUserRatings.find(id);
 
     if (!userFound)
         throw;
 
+    auto &ratings = user->second.ratings;
     std::vector<UserSearch> res;
+    res.reserve(ratings.size() >= 20 ? 20 : ratings.size());
 
-    auto ratings = user->second.ratings;
-
-    // std::sort(ratings.begin(), ratings.end());
+    // TODO: make own sort
+    std::sort(ratings.begin(), ratings.end(), std::greater<UserRating>());
 
     int i = 0;
     for (auto &&rating : ratings)
@@ -79,7 +79,7 @@ std::vector<UserSearch> Database::userSearch(uint32_t id)
         if (!playerFound || !playerRatingFound)
             throw;
 
-        res.push_back(UserSearch(player->second, playerRating->second, rating.rating));
+        res.emplace_back(UserSearch(player->second, playerRating->second, rating.rating));
         i++;
         if (i == 20)
             break;

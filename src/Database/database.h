@@ -11,7 +11,7 @@
 
 #ifdef _DEBUG
 #define PLAYERS_CSV "../../data/players.csv"
-#define RATING_CSV "../../data/rating.csv"
+#define RATING_CSV "../../data/minirating.csv"
 #else
 #define PLAYERS_CSV "../../data/players.csv"
 #define RATING_CSV "../../data/rating.csv"
@@ -21,7 +21,7 @@
 #define TAGS_CSV "../data/tags.csv"
 
 const size_t TOTAL_PLAYERS = 18945;
-const size_t TOTAL_USERS = 110052; // check
+const size_t TOTAL_USERS = 138493; // check
 
 class Database
 {

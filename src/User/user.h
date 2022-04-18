@@ -11,6 +11,11 @@ struct UserRating
     UserRating(uint32_t fifaID, float rating)
         : fifaID(fifaID),
           rating(rating) {}
+
+    bool operator>(const UserRating &obj) const
+    {
+        return (rating > obj.rating);
+    }
 };
 
 struct User
