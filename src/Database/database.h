@@ -13,8 +13,8 @@
 #define PLAYERS_CSV "../../data/players.csv"
 #define RATING_CSV "../../data/minirating.csv"
 #else
-#define PLAYERS_CSV "../../data/players.csv"
-#define RATING_CSV "../../data/rating.csv"
+#define PLAYERS_CSV "../data/players.csv"
+#define RATING_CSV "../data/rating.csv"
 #endif
 
 #define MINIRATING_CSV "../data/minirating.csv"

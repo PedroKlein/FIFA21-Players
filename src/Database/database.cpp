@@ -1,7 +1,5 @@
 #include "database.h"
 
-#include <algorithm> // TODO: implement sort
-
 Database::Database()
     : tablePlayers(TOTAL_PLAYERS),
       tablePlayersRatings(TOTAL_PLAYERS),
@@ -66,9 +64,7 @@ std::vector<UserSearch> Database::userSearch(uint32_t id)
     std::vector<UserSearch> res;
     res.reserve(ratings.size() >= 20 ? 20 : ratings.size());
 
-    // TODO: make own sort
-    std::sort(ratings.begin(), ratings.end(), std::greater<UserRating>());
-    // misc::sort(ratings.begin(), ratings.end(), std::greater<UserRating>());
+    misc::sort(ratings.begin(), ratings.end(), std::greater<UserRating>());
 
     int i = 0;
     for (auto &&rating : ratings)

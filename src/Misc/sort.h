@@ -1,35 +1,54 @@
 #pragma once
 
+#include <algorithm>
+#include <iterator>
+#include <stdlib.h>
+#include <time.h>
 namespace misc
 {
     const size_t MAX_ISORT = 32;
 
-    template <typename _IT, typename _PR>
-    void sort(const _IT begin, const _IT end, _PR pred)
+    inline int randomNumber(int start, int end)
     {
-        for (;;)
+        srand((size_t)time(NULL));
+        return rand() % end + start;
+    }
+
+    template <typename Iterator, typename _PR>
+    inline void quickSort(Iterator begin, Iterator end, _PR pred)
+    {
+        int size = (end - begin);
+        if (size <= 0)
+            return;
+
+        // TODO: improve pivot selection
+        int pivotIndex = misc::randomNumber(0, size);
+        typename std::iterator_traits<Iterator>::value_type pivot = *(begin + pivotIndex);
+
+        if (pivotIndex != 0)
+            std::swap(*(begin + pivotIndex), *begin);
+
+        int i = 1;
+        for (int j = 1; j < size; j++)
         {
-            if (end - begin <= MAX_ISORT)
-            { // small
-                _Insertion_sort_unchecked(begin, end, _Pred);
-                return;
-            }
-
-            // divide and conquer by quicksort
-            auto _Mid = _Partition_by_median_guess_unchecked(begin, end, _Pred);
-
-            _Ideal = (_Ideal >> 1) + (_Ideal >> 2); // allow 1.5 log2(N) divisions
-
-            if (_Mid.first - begin < end - _Mid.second)
-            { // loop on second half
-                _Sort_unchecked(begin, _Mid.first, _Ideal, _Pred);
-                begin = _Mid.second;
-            }
-            else
-            { // loop on first half
-                _Sort_unchecked(_Mid.second, end, _Ideal, _Pred);
-                end = _Mid.first;
+            if (pred(*(begin + j), pivot))
+            {
+                std::swap(*(begin + j), *(begin + i));
+                i++;
             }
         }
+
+        std::swap(*begin, *(begin + i - 1));
+
+        quickSort(begin, begin + i - 1, pred);
+        quickSort(begin + i, end, pred);
     }
+
+    // TODO: improbe sort with multiple algorithms
+    template <typename _IT, typename _PR>
+    inline void sort(const _IT begin, const _IT end, _PR pred)
+    {
+        misc::quickSort(begin, end, pred);
+    }
+
 }
