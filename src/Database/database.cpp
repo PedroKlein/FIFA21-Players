@@ -68,6 +68,7 @@ std::vector<UserSearch> Database::userSearch(uint32_t id)
 
     // TODO: make own sort
     std::sort(ratings.begin(), ratings.end(), std::greater<UserRating>());
+    // misc::sort(ratings.begin(), ratings.end(), std::greater<UserRating>());
 
     int i = 0;
     for (auto &&rating : ratings)
