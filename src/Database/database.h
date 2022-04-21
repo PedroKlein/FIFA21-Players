@@ -2,7 +2,10 @@
 
 #include <stdint.h>
 #include <parser.hpp>
-#include "./searchStructs.h"
+#include <vector>
+#include <array>
+#include "../SearchStructs/userSearch.h"
+#include "../SearchStructs/tagsSearch.h"
 #include "../Timer/timer.h"
 #include "../HashTable/hashTable.h"
 #include "../User/user.h"
@@ -22,7 +25,7 @@
 
 const size_t TOTAL_PLAYERS = 18945;
 const size_t TOTAL_USERS = 138493; // check
-const size_t TOTAL_TAGS = 138493;  // check
+const size_t TOTAL_TAGS = 937;     // check
 
 class Database
 {
@@ -39,6 +42,7 @@ public:
     ~Database();
 
     std::vector<UserSearch> userSearch(uint32_t id);
+    std::vector<TagsSearch> tagsSearch(std::vector<std::string> Tags);
 
 private:
     void readPlayersCSV();

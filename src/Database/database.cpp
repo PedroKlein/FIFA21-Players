@@ -1,9 +1,8 @@
 #include "database.h"
-#include "unordered_map"
 
 Database::Database()
 {
-    Timer timer;
+    Timer timer("Database_init");
 
     readPlayersCSV();
 
@@ -46,18 +45,16 @@ void Database::readRatingCSV()
         uint32_t userID = misc::atoui((*it)[0].c_str());
         float rating = misc::atof((*it)[2].c_str());
 
-        auto [user, userFound] = tableUserRatings.find(userID);
-        auto [player, playerFound] = tablePlayersRatings.find(fifaID);
+        auto [userIt, userFound] = tableUserRatings.find(userID);
+        auto [playerIt, playerFound] = tablePlayersRatings.find(fifaID);
 
         if (playerFound)
-        {
-            player->second.addRating(rating);
-        }
+            playerIt->second.addRating(rating);
 
         if (!userFound)
-            user = tableUserRatings.emplace(userID, userID);
+            userIt = tableUserRatings.emplace(userID, userID);
 
-        user->second.ratings.emplace_back(fifaID, rating);
+        userIt->second.ratings.emplace_back(fifaID, rating);
     }
 
     ratingsFile.close();
@@ -74,6 +71,13 @@ void Database::readTagsCSV()
         uint32_t fifaID = misc::atoui(row[1].c_str());
 
         auto &tag = row[2];
+
+        auto [tagIt, tagFound] = tableTags.find(tag);
+
+        if (!tagFound)
+            tagIt = tableTags.emplace(tag, tag);
+
+        tagIt->second.fifaIDs.emplace_back(fifaID);
     }
 
     tagsFile.close();
@@ -81,7 +85,7 @@ void Database::readTagsCSV()
 
 std::vector<UserSearch> Database::userSearch(uint32_t id)
 {
-    Timer timer;
+    Timer timer("UserSearch");
     auto [user, userFound] = tableUserRatings.find(id);
 
     if (!userFound)
@@ -108,5 +112,62 @@ std::vector<UserSearch> Database::userSearch(uint32_t id)
         if (i == 20)
             break;
     }
+    return res;
+}
+
+// TODO: improve tag search with a better data struct for fifa ids collection for each tag.
+std::vector<TagsSearch> Database::tagsSearch(std::vector<std::string> tags)
+{
+    Timer timer("TagsSearch");
+
+    if (tags.size() == 0)
+        return {};
+
+    std::vector<uint32_t> fifaIDsRes;
+    bool first = true;
+
+    for (auto &&tag : tags)
+    {
+        auto [tagIt, tagFound] = tableTags.find(tag);
+
+        if (!tagFound)
+            return {};
+
+        auto &fifaIds = tagIt->second.fifaIDs;
+
+        misc::sort(fifaIds.begin(), fifaIds.end(), std::less<uint32_t>());
+        fifaIds.erase(std::unique(fifaIds.begin(), fifaIds.end()), fifaIds.end());
+
+        if (first)
+        {
+            fifaIDsRes = fifaIds, first = false;
+            continue;
+        }
+        std::vector<uint32_t> newfifaIDsRes;
+        std::set_intersection(fifaIds.begin(), fifaIds.end(),
+                              fifaIDsRes.begin(), fifaIDsRes.end(),
+                              back_inserter(newfifaIDsRes));
+
+        if (newfifaIDsRes.size() == 0)
+            return {};
+
+        fifaIDsRes = newfifaIDsRes;
+    }
+
+    std::vector<TagsSearch> res;
+    res.reserve(fifaIDsRes.size());
+
+    for (auto &&id : fifaIDsRes)
+    {
+
+        auto [playerRating, playerRatingFound] = tablePlayersRatings.find(id);
+        auto [player, playerFound] = tablePlayers.find(id);
+
+        if (!playerFound || !playerRatingFound)
+            throw;
+
+        res.emplace_back(TagsSearch(player->second, playerRating->second));
+    }
+
     return res;
 }

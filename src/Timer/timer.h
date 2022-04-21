@@ -1,6 +1,7 @@
 #pragma once
 
 #include <chrono>
+#include <string>
 #include <iostream>
 
 struct Timer
@@ -13,8 +14,14 @@ struct Timer
 #endif
 
     std::chrono::duration<float> duration;
+    std::string context{};
 
     Timer()
+    {
+        start = std::chrono::high_resolution_clock::now();
+    }
+
+    Timer(std::string_view context) : context(context)
     {
         start = std::chrono::high_resolution_clock::now();
     }
@@ -27,6 +34,6 @@ struct Timer
 
         float ms = duration.count() * 1000.0f;
 
-        std::cout << "Took " << ms << " ms" << std::endl;
+        std::cout << context << " took " << ms << " ms" << std::endl;
     }
 };
