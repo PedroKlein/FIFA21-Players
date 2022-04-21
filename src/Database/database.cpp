@@ -116,7 +116,7 @@ std::vector<UserSearch> Database::userSearch(uint32_t id)
 }
 
 // TODO: improve tag search with a better data struct for fifa ids collection for each tag.
-std::vector<TagsSearch> Database::tagsSearch(std::vector<std::string> tags)
+std::vector<TagsSearch> Database::tagsSearch(const std::vector<std::string> &tags)
 {
     Timer timer("TagsSearch");
 

@@ -8,6 +8,6 @@ struct Tags
     std::string tag;
     std::vector<uint32_t> fifaIDs;
 
-    Tags(std::string tag)
+    Tags(std::string_view tag)
         : tag(tag) {}
 };

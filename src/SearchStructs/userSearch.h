@@ -15,7 +15,7 @@ struct UserSearch
 
     UserSearch(){};
 
-    UserSearch(Player player, PlayerRating playerRating, float userRating)
+    UserSearch(const Player &player, const PlayerRating &playerRating, float userRating)
         : fifaID(player.fifaID),
           name(player.name),
           globalRating(playerRating.rating),

@@ -42,7 +42,7 @@ public:
     ~Database();
 
     std::vector<UserSearch> userSearch(uint32_t id);
-    std::vector<TagsSearch> tagsSearch(std::vector<std::string> Tags);
+    std::vector<TagsSearch> tagsSearch(const std::vector<std::string> &Tags);
 
 private:
     void readPlayersCSV();

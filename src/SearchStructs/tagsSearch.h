@@ -14,7 +14,7 @@ struct TagsSearch
 
     TagsSearch(){};
 
-    TagsSearch(Player player, PlayerRating playerRating)
+    TagsSearch(const Player &player, const PlayerRating &playerRating)
         : fifaID(player.fifaID),
           name(player.name),
           playerPosition(player.positions),

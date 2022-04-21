@@ -9,7 +9,7 @@ struct Player
     std::string name;
     std::string positions;
 
-    Player(uint32_t fifaID, std::string name, std::string positions)
+    Player(uint32_t fifaID, std::string_view name, std::string_view positions)
         : fifaID(fifaID),
           name(name),
           positions(positions) {}

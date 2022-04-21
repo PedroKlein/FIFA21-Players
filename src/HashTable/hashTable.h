@@ -35,14 +35,14 @@ public:
     }
 
     // TODO: improve hash function
-    size_t hash(const uint32_t &key) const
+    size_t hash(uint32_t key) const
     {
         size_t hash = key * 7;
 
         return hash % capacity;
     }
 
-    size_t hash(const std::string &key) const
+    size_t hash(std::string_view key) const
     {
         size_t hash = 0;
 
@@ -52,7 +52,7 @@ public:
         return hash % capacity;
     }
 
-    typename HashPosition::iterator insert(HashItem item)
+    typename HashPosition::iterator insert(const HashItem &item)
     {
         size_t index = hash(item.first);
 

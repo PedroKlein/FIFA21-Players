@@ -44,7 +44,7 @@ namespace misc
         quickSort(begin + i, end, pred);
     }
 
-    // TODO: improbe sort with multiple algorithms
+    // TODO: improve sort with multiple algorithms
     template <typename _IT, typename _PR>
     inline void sort(const _IT begin, const _IT end, _PR pred)
     {
