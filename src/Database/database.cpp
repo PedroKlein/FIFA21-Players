@@ -3,10 +3,22 @@
 Database::Database()
     : tablePlayers(TOTAL_PLAYERS),
       tablePlayersRatings(TOTAL_PLAYERS),
-      tableUserRatings(TOTAL_USERS)
+      tableUserRatings(TOTAL_USERS),
+      tableTags(TOTAL_TAGS)
 {
     Timer timer;
 
+    readPlayersCSV();
+
+    readRatingCSV();
+
+    readTagsCSV();
+}
+
+Database::~Database() {}
+
+void Database::readPlayersCSV()
+{
     std::ifstream playersFile(PLAYERS_CSV);
     aria::csv::CsvParser playersParser(playersFile);
 
@@ -22,8 +34,12 @@ Database::Database()
 
         tablePlayersRatings.emplace(fifaID, fifaID);
     }
-    playersFile.close();
 
+    playersFile.close();
+}
+
+void Database::readRatingCSV()
+{
     std::ifstream ratingsFile(RATING_CSV);
     aria::csv::CsvParser ratingsParser(ratingsFile);
 
@@ -50,7 +66,21 @@ Database::Database()
     ratingsFile.close();
 }
 
-Database::~Database() {}
+void Database::readTagsCSV()
+{
+    std::ifstream tagsFile(TAGS_CSV);
+    aria::csv::CsvParser tagsParser(tagsFile);
+
+    for (auto it = ++tagsParser.begin(); it != tagsParser.end(); ++it)
+    {
+        auto &row = (*it);
+        uint32_t fifaID = misc::atoui(row[1].c_str());
+
+        auto &tag = row[2];
+    }
+
+    tagsFile.close();
+}
 
 std::vector<UserSearch> Database::userSearch(uint32_t id)
 {
