@@ -22,23 +22,24 @@
 
 const size_t TOTAL_PLAYERS = 18945;
 const size_t TOTAL_USERS = 138493; // check
-const size_t TOTAL_TAGS = 138493; // check
+const size_t TOTAL_TAGS = 138493;  // check
 
 class Database
 {
 private:
-    HashTable<Player> tablePlayers;
-    HashTable<PlayerRating> tablePlayersRatings;
+    HashTable<uint32_t, Player, TOTAL_PLAYERS> tablePlayers;
+    HashTable<uint32_t, PlayerRating, TOTAL_PLAYERS> tablePlayersRatings;
 
-    HashTable<User> tableUserRatings;
+    HashTable<uint32_t, User, TOTAL_USERS> tableUserRatings;
 
-    HashTable<Tags> tableTags;
+    HashTable<std::string, Tags, TOTAL_TAGS> tableTags;
 
 public:
     Database();
     ~Database();
 
     std::vector<UserSearch> userSearch(uint32_t id);
+
 private:
     void readPlayersCSV();
     void readRatingCSV();

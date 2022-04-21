@@ -1,10 +1,7 @@
 #include "database.h"
+#include "unordered_map"
 
 Database::Database()
-    : tablePlayers(TOTAL_PLAYERS),
-      tablePlayersRatings(TOTAL_PLAYERS),
-      tableUserRatings(TOTAL_USERS),
-      tableTags(TOTAL_TAGS)
 {
     Timer timer;
 

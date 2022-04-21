@@ -3,32 +3,28 @@
 #include <vector>
 #include <memory>
 
-template <typename T>
-using HashItem = std::pair<uint32_t, T>;
-
-template <typename T>
-using HashPosition = std::vector<HashItem<T>>;
-
-template <typename T>
+template <typename K, typename T, size_t N>
 class HashTable
 {
+public:
+    using HashItem = std::pair<K, T>;
+    using HashPosition = std::vector<HashItem>;
+
 private:
-    std::unique_ptr<HashPosition<T>[]> items;
+    std::unique_ptr<HashPosition[]> items;
     size_t capacity = 0;
     size_t size = 0;
     size_t colisions = 0;
     size_t maxColisions = 0;
 
 public:
-    HashTable(size_t capacity)
+    HashTable()
     {
-        this->capacity = capacity;
-        items = std::unique_ptr<HashPosition<T>[]>(new HashPosition<T>[capacity]);
+        capacity = N;
+        items = std::unique_ptr<HashPosition[]>(new HashPosition[capacity]);
     }
 
-    ~HashTable()
-    {
-    }
+    ~HashTable() {}
 
     size_t getCapacity()
     {
@@ -51,18 +47,26 @@ public:
     }
 
     // TODO: improve hash function
-    uint32_t hash(const uint32_t &key)
+    size_t hash(const uint32_t &key) const
     {
-        uint32_t hash = key * 7;
+        size_t hash = key * 7;
 
         return hash % capacity;
     }
 
-    typename HashPosition<T>::iterator insert(HashItem<T> item)
+    size_t hash(const std::string &key) const
     {
-        unsigned long index = hash(item.first);
-        if (items[index].size() > 0)
-            maxColisions = items[index].size() + 1 > maxColisions ? items[index].size() + 1 : maxColisions;
+        size_t hash = 0;
+
+        for (size_t i = 0; i < key.length(); i++)
+            hash = (hash * 7) + key[i];
+
+        return hash % capacity;
+    }
+
+    typename HashPosition::iterator insert(HashItem item)
+    {
+        size_t index = hash(item.first);
 
         items[index].push_back(item);
         size++;
@@ -70,21 +74,18 @@ public:
     }
 
     template <typename... Args>
-    typename HashPosition<T>::iterator emplace(uint32_t key, Args &&...args)
+    typename HashPosition::iterator emplace(uint32_t key, Args &&...args)
     {
-        // HashItem<T> item(key, std::forward<Args>(args)...);
-        unsigned long index = hash(key);
-        if (items[index].size() > 0)
-            maxColisions = items[index].size() + 1 > maxColisions ? items[index].size() + 1 : maxColisions;
+        size_t index = hash(key);
 
         items[index].emplace_back(key, std::forward<Args>(args)...);
         size++;
         return items[index].end() - 1;
     }
 
-    std::pair<typename HashPosition<T>::iterator, bool> find(const uint32_t &key)
+    std::pair<typename HashPosition::iterator, bool> find(const uint32_t &key)
     {
-        uint32_t index = hash(key);
+        size_t index = hash(key);
 
         for (auto i = items[index].begin(); i != items[index].end(); ++i)
         {
@@ -97,7 +98,7 @@ public:
         return {end(), false};
     }
 
-    typename HashPosition<T>::iterator end()
+    typename HashPosition::iterator end()
     {
         return items[capacity - 1].end();
     }
