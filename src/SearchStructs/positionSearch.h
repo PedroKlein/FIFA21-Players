@@ -2,7 +2,7 @@
 
 #include <stdint.h>
 #include <iostream>
-#include "../Players/players.h"
+#include "../Structs/players.h"
 
 struct PositionSearch
 {

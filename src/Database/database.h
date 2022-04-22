@@ -4,13 +4,10 @@
 #include <parser.hpp>
 #include <vector>
 #include <array>
+#include "../Structs/index.h"
 #include "../SearchStructs/index.h"
 #include "../Timer/timer.h"
 #include "../HashTable/hashTable.h"
-#include "../User/user.h"
-#include "../Players/players.h"
-#include "../Tag/tag.h"
-#include "../Position/position.h"
 #include "../Misc/misc.h"
 
 #ifdef _DEBUG

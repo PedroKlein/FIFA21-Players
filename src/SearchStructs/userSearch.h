@@ -2,8 +2,8 @@
 
 #include <stdint.h>
 #include <iostream>
-#include "../Players/players.h"
-#include "../User/user.h"
+#include "../Structs/players.h"
+#include "../Structs/user.h"
 
 struct UserSearch
 {
