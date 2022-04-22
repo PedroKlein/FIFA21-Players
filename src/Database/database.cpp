@@ -9,6 +9,8 @@ Database::Database()
     readRatingCSV();
 
     readTagsCSV();
+
+    fillTablePositions();
 }
 
 Database::~Database() {}
@@ -83,6 +85,42 @@ void Database::readTagsCSV()
     tagsFile.close();
 }
 
+void Database::fillTablePositions()
+{
+    std::ifstream playersFile(PLAYERS_CSV);
+    aria::csv::CsvParser playersParser(playersFile);
+
+    for (auto it = ++playersParser.begin(); it != playersParser.end(); ++it)
+    {
+        auto &row = (*it);
+        uint32_t fifaID = misc::atoui(row[0].c_str());
+
+        auto [playerRating, playerRatingFound] = tablePlayersRatings.find(fifaID);
+
+        if (!playerRatingFound)
+            throw;
+
+#ifndef _DEBUG
+        if (playerRating->second.count < 1000)
+            continue;
+#endif
+
+        std::vector<std::string> positions = misc::splitString(row[2], ',');
+
+        for (auto &&pos : positions)
+        {
+            auto [position, positionFound] = tablePositions.find(pos);
+
+            if (!positionFound)
+                position = tablePositions.emplace(pos, pos);
+            // TODO: insert sorted by rating
+            position->second.fifaIDs.emplace_back(fifaID);
+        }
+    }
+
+    playersFile.close();
+}
+
 std::vector<UserSearch> Database::userSearch(uint32_t id)
 {
     Timer timer("UserSearch");
@@ -108,8 +146,38 @@ std::vector<UserSearch> Database::userSearch(uint32_t id)
             throw;
 
         res.emplace_back(UserSearch(player->second, playerRating->second, rating.rating));
-        i++;
-        if (i == 20)
+
+        if (++i == 20)
+            break;
+    }
+    return res;
+}
+
+std::vector<PositionSearch> Database::positionSearch(uint32_t topN, std::string position)
+{
+    Timer timer("PositionSearch");
+    auto [positionIt, positionFound] = tablePositions.find(position);
+
+    if (!positionFound)
+        return {};
+
+    auto &fifaIds = positionIt->second.fifaIDs;
+    std::vector<PositionSearch> res;
+    res.reserve(fifaIds.size() >= topN ? topN : fifaIds.size());
+
+    int i = 0;
+    for (auto &&id : fifaIds)
+    {
+
+        auto [playerRating, playerRatingFound] = tablePlayersRatings.find(id);
+        auto [player, playerFound] = tablePlayers.find(id);
+
+        if (!playerFound || !playerRatingFound)
+            throw;
+
+        res.emplace_back(PositionSearch(player->second, playerRating->second));
+
+        if (++i == topN)
             break;
     }
     return res;

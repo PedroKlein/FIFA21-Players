@@ -4,13 +4,13 @@
 #include <parser.hpp>
 #include <vector>
 #include <array>
-#include "../SearchStructs/userSearch.h"
-#include "../SearchStructs/tagsSearch.h"
+#include "../SearchStructs/index.h"
 #include "../Timer/timer.h"
 #include "../HashTable/hashTable.h"
 #include "../User/user.h"
 #include "../Players/players.h"
-#include "../Tags/tags.h"
+#include "../Tag/tag.h"
+#include "../Position/position.h"
 #include "../Misc/misc.h"
 
 #ifdef _DEBUG
@@ -26,6 +26,7 @@
 const size_t TOTAL_PLAYERS = 18945;
 const size_t TOTAL_USERS = 138493; // check
 const size_t TOTAL_TAGS = 937;     // check
+const size_t TOTAL_POSITIONS = 30;
 
 class Database
 {
@@ -35,17 +36,21 @@ private:
 
     HashTable<uint32_t, User, TOTAL_USERS> tableUserRatings;
 
-    HashTable<std::string, Tags, TOTAL_TAGS> tableTags;
+    HashTable<std::string, Position, TOTAL_POSITIONS> tablePositions;
+
+    HashTable<std::string, Tag, TOTAL_TAGS> tableTags;
 
 public:
     Database();
     ~Database();
 
     std::vector<UserSearch> userSearch(uint32_t id);
+    std::vector<PositionSearch> positionSearch(uint32_t topN, std::string position);
     std::vector<TagsSearch> tagsSearch(const std::vector<std::string> &Tags);
 
 private:
     void readPlayersCSV();
     void readRatingCSV();
     void readTagsCSV();
+    void fillTablePositions();
 };

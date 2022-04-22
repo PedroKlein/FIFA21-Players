@@ -31,3 +31,24 @@ float misc::atof(const char *str)
         }
     return sign * (f + (float)m / d);
 }
+
+std::vector<std::string> misc::splitString(const std::string &str, char delimiter)
+{
+    size_t pos_start = 0, pos_end, delim_len = 1;
+    std::string subStr;
+    std::vector<std::string> res;
+
+    while ((pos_end = str.find(delimiter, pos_start)) != std::string::npos)
+    {
+        subStr = str.substr(pos_start, pos_end - pos_start);
+        pos_start = pos_end + delim_len;
+
+        if (str[pos_start] == ' ')
+            pos_start++;
+
+        res.push_back(subStr);
+    }
+
+    res.push_back(str.substr(pos_start));
+    return res;
+}

@@ -71,7 +71,7 @@ public:
         return items[index].end() - 1;
     }
 
-    std::pair<typename HashPosition::iterator, bool> find(const K &key)
+    std::pair<typename HashPosition::iterator, bool> find(K key)
     {
         size_t index = hash(key);
 

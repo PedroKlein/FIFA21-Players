@@ -3,11 +3,11 @@
 #include <string>
 #include <vector>
 
-struct Tags
+struct Tag
 {
     std::string tag;
     std::vector<uint32_t> fifaIDs;
 
-    Tags(std::string_view tag)
+    Tag(std::string_view tag)
         : tag(tag) {}
 };
