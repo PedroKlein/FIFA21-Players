@@ -4,27 +4,34 @@
 #include <cstdlib>
 #include <iostream>
 #include <string>
+#include <vector>
+#include <memory>
 
-#define ALPHABET_SIZE 26
-
-using namespace std;
+#define ALPHABET_SIZE 30 // four more because of '.', ' ', '-' and '''
 
 struct TrieNode
 {
-    struct TrieNode *children[ALPHABET_SIZE];
-    int fifaID;
+    std::shared_ptr<TrieNode> children[ALPHABET_SIZE];
+    uint32_t fifaID;
     bool isEndOfWord;
-} typedef TrieNode;
+
+    TrieNode();
+    ~TrieNode();
+};
 
 class TrieTree
 {
 private:
-    TrieNode *root;
-    TrieNode *getNode(void);
+    std::shared_ptr<TrieNode> root;
+    size_t totalWords;
+
+    void getAllIDs(TrieNode *root, std::vector<uint32_t> &ids);
+
+    size_t getIndex(char c);
 
 public:
-    TrieTree(void);
+    TrieTree();
     ~TrieTree();
-    void insert(string key, int fifaID);
-    int search(string key);
+    void insert(std::string_view key, uint32_t fifaID);
+    std::vector<uint32_t> search(std::string_view key);
 };

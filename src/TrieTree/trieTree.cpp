@@ -1,64 +1,83 @@
 #include "trieTree.h"
 
-TrieTree::TrieTree(void)
+TrieNode::TrieNode()
 {
-    struct TrieNode *pNode = new TrieNode;
+    for (size_t i = 0; i < ALPHABET_SIZE; i++)
+        this->children[i] = std::shared_ptr<TrieNode>();
 
-    pNode->isEndOfWord = false;
-
-    for (int i = 0; i < ALPHABET_SIZE; i++)
-        pNode->children[i] = NULL;
-
-    this->root = pNode;
+    this->isEndOfWord = false;
 }
 
-TrieTree::~TrieTree()
+TrieNode::~TrieNode(){};
+
+TrieTree::TrieTree()
 {
+    this->root = std::shared_ptr<TrieNode>(new TrieNode);
+    this->totalWords = 0;
 }
 
-void TrieTree::insert(string key, int fifaID)
-{
-    struct TrieNode *pCrawl = this->root;
+TrieTree::~TrieTree() {}
 
-    for (int i = 0; i < key.length(); i++)
+void TrieTree::insert(std::string_view key, uint32_t fifaID)
+{
+    std::shared_ptr<TrieNode> pCrawl = this->root;
+
+    for (size_t i = 0; i < key.length(); i++)
     {
-        int index = key[i] - 'a';
+        size_t index = this->getIndex(key[i]);
         if (!pCrawl->children[index])
-            pCrawl->children[index] = this->getNode();
+            pCrawl->children[index] = std::shared_ptr<TrieNode>(new TrieNode);
 
         pCrawl = pCrawl->children[index];
     }
 
+    this->totalWords++;
     pCrawl->isEndOfWord = true;
     pCrawl->fifaID = fifaID;
     return;
 }
 
-TrieNode *TrieTree::getNode(void)
+std::vector<uint32_t> TrieTree::search(std::string_view key)
 {
-    struct TrieNode *pNode = new TrieNode;
+    std::shared_ptr<TrieNode> pCrawl = this->root;
+    std::vector<uint32_t> res;
 
-    pNode->isEndOfWord = false;
-
-    for (int i = 0; i < ALPHABET_SIZE; i++)
-        pNode->children[i] = NULL;
-
-    return pNode;
-}
-
-
-int TrieTree::search(string key)
-{
-    struct TrieNode *pCrawl = this->root;
- 
-    for (int i = 0; i < key.length(); i++)
+    for (size_t i = 0; i < key.length(); i++)
     {
-        int index = key[i] - 'a';
+        size_t index = this->getIndex(key[i]);
         if (!pCrawl->children[index])
-            return false;
- 
+            return {};
+
         pCrawl = pCrawl->children[index];
     }
- 
-    return (pCrawl != NULL && pCrawl->isEndOfWord) ? pCrawl->fifaID: -1;
+
+    getAllIDs(pCrawl.get(), res);
+
+    return res;
+}
+
+size_t TrieTree::getIndex(char c)
+{
+    if (c == ' ')
+        return ALPHABET_SIZE - 4;
+    if (c == '.')
+        return ALPHABET_SIZE - 3;
+    if (c == '-')
+        return ALPHABET_SIZE - 2;
+    if (c == '\'')
+        return ALPHABET_SIZE - 1;
+    return c - 'a';
+}
+
+void TrieTree::getAllIDs(TrieNode *root, std::vector<uint32_t> &ids)
+{
+    if (!root)
+        return;
+    for (size_t i = 0; i < ALPHABET_SIZE; i++)
+    {
+        getAllIDs(root->children[i].get(), ids);
+
+        if (root->children[i] && root->children[i]->isEndOfWord)
+            ids.push_back(root->children[i]->fifaID);
+    }
 }

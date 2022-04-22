@@ -32,6 +32,14 @@ float misc::atof(const char *str)
     return sign * (f + (float)m / d);
 }
 
+std::string misc::toLower(const std::string &str)
+{
+    std::string res = str;
+    for (auto &&c : res)
+        c = tolower(c);
+    return res;
+}
+
 std::vector<std::string> misc::splitString(const std::string &str, char delimiter)
 {
     size_t pos_start = 0, pos_end, delim_len = 1;

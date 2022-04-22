@@ -31,6 +31,8 @@ void Database::readPlayersCSV()
         tablePlayers.emplace(fifaID, Player{fifaID, name.c_str(), positions.c_str()});
 
         tablePlayersRatings.emplace(fifaID, fifaID);
+
+        this->namesTree.insert(misc::toLower(name), fifaID);
     }
 
     playersFile.close();
@@ -119,6 +121,29 @@ void Database::fillTablePositions()
     }
 
     playersFile.close();
+}
+
+std::vector<PlayerSearch> Database::playersSearch(std::string str)
+{
+    Timer timer("PlayerSearch");
+
+    auto fifaIds = this->namesTree.search(misc::toLower(str));
+
+    std::vector<PlayerSearch> res;
+
+    for (auto &&id : fifaIds)
+    {
+
+        auto [playerRating, playerRatingFound] = tablePlayersRatings.find(id);
+        auto [player, playerFound] = tablePlayers.find(id);
+
+        if (!playerFound || !playerRatingFound)
+            throw;
+
+        res.emplace_back(PlayerSearch(player->second, playerRating->second));
+    }
+
+    return res;
 }
 
 std::vector<UserSearch> Database::userSearch(uint32_t id)

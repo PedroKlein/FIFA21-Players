@@ -11,5 +11,7 @@ namespace misc
 
     float atof(const char *str);
 
+    std::string toLower(const std::string &str);
+
     std::vector<std::string> splitString(const std::string &str, char delimiter);
 }

@@ -8,6 +8,7 @@
 #include "../SearchStructs/index.h"
 #include "../Timer/timer.h"
 #include "../HashTable/hashTable.h"
+#include "../TrieTree/trieTree.h"
 #include "../Misc/misc.h"
 
 #ifdef _DEBUG
@@ -37,10 +38,13 @@ private:
 
     HashTable<std::string, Tag, TOTAL_TAGS> tableTags;
 
+    TrieTree namesTree;
+
 public:
     Database();
     ~Database();
 
+    std::vector<PlayerSearch> playersSearch(std::string str);
     std::vector<UserSearch> userSearch(uint32_t id);
     std::vector<PositionSearch> positionSearch(uint32_t topN, std::string position);
     std::vector<TagsSearch> tagsSearch(const std::vector<std::string> &Tags);
