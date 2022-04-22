@@ -1,1 +1,0 @@
-add_library(trieTree trieTree.cpp trieTree.h)
