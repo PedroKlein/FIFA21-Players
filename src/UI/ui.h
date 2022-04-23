@@ -4,6 +4,7 @@
 #include <AppCore/Window.h>
 #include <AppCore/Overlay.h>
 #include <AppCore/JSHelpers.h>
+#include "../Database/database.h"
 
 using namespace ultralight;
 
@@ -13,7 +14,7 @@ class UI : public AppListener,
            public ViewListener
 {
 public:
-  UI();
+  UI(Database &db);
 
   virtual ~UI();
 
@@ -47,6 +48,8 @@ public:
   void OnRequestSearch(const JSObject &obj, const JSArgs &args);
 
 protected:
+  Database &db;
+
   JSContextRef context_;
   RefPtr<App> app_;
   RefPtr<Window> window_;

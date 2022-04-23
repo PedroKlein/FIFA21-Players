@@ -10,7 +10,8 @@ struct BindingUI
   static void OnRequestSearch(const JSObject &obj, const JSArgs &args);
 };
 
-UI::UI()
+UI::UI(Database &db)
+    : db(db)
 {
   app_ = App::Create();
 
@@ -93,11 +94,6 @@ void UI::OnClose()
 
 void UI::OnResize(uint32_t width, uint32_t height)
 {
-  ///
-  /// This is called whenever the window changes size (values in pixels).
-  ///
-  /// We resize our overlay here to take up the entire window.
-  ///
   overlay_->Resize(width, height);
 }
 
@@ -157,6 +153,7 @@ void UI::OnRequestSearch(const JSObject &obj, const JSArgs &args)
   if (args.size() == 1)
   {
     ultralight::String search = args[0];
-    String searchUTF = search.utf16();
+    std::string cppString(search.utf8().data());
+    auto res = db.playersSearch(cppString);
   }
 }

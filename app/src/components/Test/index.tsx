@@ -3,15 +3,18 @@ import "./styles.scss";
 
 const Test: React.FC = () => {
   const [test, setTest] = useState("NAO");
+  const [search, setSearch] = useState<string>();
   const calledFromCPP = () => {
     //@ts-ignore
     setTest(window["GetData"]()["data"]);
   };
 
-  function onSubmit(e: React.FormEvent<HTMLFormElement>) {
+  function onSubmit(e: React.FormEvent) {
     e.preventDefault();
     //@ts-ignore
-    window["OnRequestSearch"]("TEST SEARCH");
+    console.log(search);
+    //@ts-ignore
+    window["OnRequestSearch"](search);
   }
 
   return (
@@ -26,6 +29,9 @@ const Test: React.FC = () => {
           name="search"
           id="search"
           placeholder="search..."
+          onChange={(e) => {
+            setSearch(e.target.value);
+          }}
         />
         <button type="submit">search</button>
       </form>
