@@ -15,7 +15,7 @@ int main(int argc, char const *argv[])
   // for (auto &&i : userSearch)
   //   std::cout << i;
 
-  auto positionSearch = database.positionSearch(5, "CAM");
+  auto positionSearch = database.positionSearch(10, "ST");
 
   // for (auto &&i : positionSearch)
   //   std::cout << i;

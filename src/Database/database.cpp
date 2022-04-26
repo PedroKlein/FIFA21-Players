@@ -81,7 +81,7 @@ void Database::readTagsCSV()
         if (!tagFound)
             tagIt = tableTags.emplace(tag, tag);
 
-        tagIt->second.fifaIDs.emplace_back(fifaID);
+        tagIt->second.fifaIDs.insert(fifaID);
     }
 
     tagsFile.close();
@@ -230,16 +230,14 @@ std::vector<TagsSearch> Database::tagsSearch(const std::vector<std::string> &tag
         if (!tagFound)
             return {};
 
-        auto &fifaIds = tagIt->second.fifaIDs;
-
-        misc::sort(fifaIds.begin(), fifaIds.end(), std::less<uint32_t>());
-        fifaIds.erase(std::unique(fifaIds.begin(), fifaIds.end()), fifaIds.end());
+        auto &fifaIds = tagIt->second.fifaIDs.getOderedVector();
 
         if (first)
         {
             fifaIDsRes = fifaIds, first = false;
             continue;
         }
+
         std::vector<uint32_t> newfifaIDsRes;
         std::set_intersection(fifaIds.begin(), fifaIds.end(),
                               fifaIDsRes.begin(), fifaIDsRes.end(),
