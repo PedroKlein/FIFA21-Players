@@ -119,7 +119,7 @@ void Database::fillTablePositions()
 
             if (!positionFound)
                 position = tablePositions.emplace(pos, pos);
-            // TODO: insert sorted by rating
+
             position->second.fifaIDs.insert(PositionRBKey{fifaID, rating});
         }
     }
@@ -212,7 +212,6 @@ std::vector<PositionSearch> Database::positionSearch(uint32_t topN, std::string 
     return res;
 }
 
-// TODO: improve tag search with a better data struct for fifa ids collection for each tag.
 std::vector<TagsSearch> Database::tagsSearch(const std::vector<std::string> &tags)
 {
     Timer timer("TagsSearch");

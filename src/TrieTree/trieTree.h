@@ -7,7 +7,7 @@
 #include <vector>
 #include <memory>
 
-#define ALPHABET_SIZE 30 // four more because of '.', ' ', '-' and '''
+#define ALPHABET_SIZE 31 // five more because of '.', ' ', '-', '\'' and "\""
 
 struct TrieNode
 {
@@ -27,7 +27,7 @@ private:
 
     void getAllIDs(TrieNode *root, std::vector<uint32_t> &ids);
 
-    size_t getIndex(char c);
+    int getIndex(char c);
 
 public:
     TrieTree();

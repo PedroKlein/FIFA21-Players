@@ -24,7 +24,9 @@ void TrieTree::insert(std::string_view key, uint32_t fifaID)
 
     for (size_t i = 0; i < key.length(); i++)
     {
-        size_t index = this->getIndex(key[i]);
+        int index = this->getIndex(key[i]);
+        if (index == -1)
+            throw;
         if (!pCrawl->children[index])
             pCrawl->children[index] = std::shared_ptr<TrieNode>(new TrieNode);
 
@@ -44,8 +46,8 @@ std::vector<uint32_t> TrieTree::search(std::string_view key)
 
     for (size_t i = 0; i < key.length(); i++)
     {
-        size_t index = this->getIndex(key[i]);
-        if (!pCrawl->children[index])
+        int index = this->getIndex(key[i]);
+        if (index == -1 || !pCrawl->children[index])
             return {};
 
         pCrawl = pCrawl->children[index];
@@ -56,17 +58,30 @@ std::vector<uint32_t> TrieTree::search(std::string_view key)
     return res;
 }
 
-size_t TrieTree::getIndex(char c)
+int TrieTree::getIndex(char c)
 {
-    if (c == ' ')
+    switch (c)
+    {
+    case '\"':
+        return ALPHABET_SIZE - 5;
+        break;
+    case ' ':
         return ALPHABET_SIZE - 4;
-    if (c == '.')
+    case '.':
         return ALPHABET_SIZE - 3;
-    if (c == '-')
+    case '-':
         return ALPHABET_SIZE - 2;
-    if (c == '\'')
+    case '\'':
         return ALPHABET_SIZE - 1;
-    return c - 'a';
+
+    default:
+        int index = c - 'a';
+
+        if (index < 0 || index > 26)
+            return -1;
+
+        return index;
+    }
 }
 
 void TrieTree::getAllIDs(TrieNode *root, std::vector<uint32_t> &ids)
