@@ -1,11 +1,19 @@
 import React from "react";
 import { BrowserRouter, Link, Route, Routes } from "react-router-dom";
+import { ThemeProvider } from "styled-components";
 import NavBar from "./components/NavBar";
 import Test from "./components/Test";
+import GlobalStyles from "./styles/GlobalStyles";
+import { ThemeName, themes, ThemeType } from "./styles/themes";
+import Home from "./views/Home";
+import PlayersSearch from "./views/PlayersSearch";
 
 const App: React.FC = () => {
+  const themeName: ThemeName = "main";
+  const currentTheme: ThemeType = themes[themeName];
   return (
-    <>
+    <ThemeProvider theme={currentTheme}>
+      <GlobalStyles />
       <BrowserRouter>
         <NavBar>
           <li>
@@ -14,14 +22,19 @@ const App: React.FC = () => {
           <li>
             <Link to="/test">Test</Link>
           </li>
+          <li>
+            <Link to="/players">Players Search</Link>
+          </li>
         </NavBar>
-
-        <Routes>
-          <Route path="/" element={<></>} />
-          <Route path="/test" element={<Test />} />
-        </Routes>
+        <main>
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/test" element={<Test />} />
+            <Route path="/players" element={<PlayersSearch />} />
+          </Routes>
+        </main>
       </BrowserRouter>
-    </>
+    </ThemeProvider>
   );
 };
 

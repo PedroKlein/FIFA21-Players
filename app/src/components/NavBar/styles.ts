@@ -1,9 +1,12 @@
-.nav-bar {
+import styled from "styled-components";
+
+export const Container = styled.nav`
   overflow: hidden;
   background-color: #333;
-  position: fixed;
+  position: sticky;
   top: 0;
   width: 100%;
+  height: 50px;
   ul {
     text-align: center;
     padding: 15px;
@@ -19,4 +22,4 @@
       }
     }
   }
-}
+`;
