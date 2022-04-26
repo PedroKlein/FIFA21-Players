@@ -6,11 +6,6 @@ include(cmake/App.cmake)
 
 FILE(GLOB_RECURSE SOURCES src/*)
 
-# set(SOURCES "src/UI/ui.h"
-#             "src/UI/ui.cpp"
-#             "src/DataExample/dataExample.h"
-#             "src/main.cpp")
-
 add_app("${SOURCES}")
 
 #           DOWNLOAD ALL THE SUBMODULES

@@ -81,7 +81,7 @@ void Database::readTagsCSV()
         if (!tagFound)
             tagIt = tableTags.emplace(tag, tag);
 
-        tagIt->second.fifaIDs.emplace_back(fifaID);
+        tagIt->second.fifaIDs.insert(fifaID);
     }
 
     tagsFile.close();
@@ -102,6 +102,10 @@ void Database::fillTablePositions()
         if (!playerRatingFound)
             throw;
 
+        float &rating = playerRating->second.rating;
+        size_t &count = playerRating->second.count;
+        rating /= count;
+
 #ifndef _DEBUG
         if (playerRating->second.count < 1000)
             continue;
@@ -115,8 +119,8 @@ void Database::fillTablePositions()
 
             if (!positionFound)
                 position = tablePositions.emplace(pos, pos);
-            // TODO: insert sorted by rating
-            position->second.fifaIDs.emplace_back(fifaID);
+
+            position->second.fifaIDs.insert(PositionRBKey{fifaID, rating});
         }
     }
 
@@ -186,16 +190,15 @@ std::vector<PositionSearch> Database::positionSearch(uint32_t topN, std::string 
     if (!positionFound)
         return {};
 
-    auto &fifaIds = positionIt->second.fifaIDs;
+    auto &fifaIds = positionIt->second.fifaIDs.getOderedVector();
     std::vector<PositionSearch> res;
     res.reserve(fifaIds.size() >= topN ? topN : fifaIds.size());
 
     int i = 0;
-    for (auto &&id : fifaIds)
+    for (auto it = fifaIds.rbegin(); it != fifaIds.rend(); ++it)
     {
-
-        auto [playerRating, playerRatingFound] = tablePlayersRatings.find(id);
-        auto [player, playerFound] = tablePlayers.find(id);
+        auto [playerRating, playerRatingFound] = tablePlayersRatings.find(it->fifaID);
+        auto [player, playerFound] = tablePlayers.find(it->fifaID);
 
         if (!playerFound || !playerRatingFound)
             throw;
@@ -205,10 +208,10 @@ std::vector<PositionSearch> Database::positionSearch(uint32_t topN, std::string 
         if (++i == topN)
             break;
     }
+
     return res;
 }
 
-// TODO: improve tag search with a better data struct for fifa ids collection for each tag.
 std::vector<TagsSearch> Database::tagsSearch(const std::vector<std::string> &tags)
 {
     Timer timer("TagsSearch");
@@ -226,16 +229,14 @@ std::vector<TagsSearch> Database::tagsSearch(const std::vector<std::string> &tag
         if (!tagFound)
             return {};
 
-        auto &fifaIds = tagIt->second.fifaIDs;
-
-        misc::sort(fifaIds.begin(), fifaIds.end(), std::less<uint32_t>());
-        fifaIds.erase(std::unique(fifaIds.begin(), fifaIds.end()), fifaIds.end());
+        auto &fifaIds = tagIt->second.fifaIDs.getOderedVector();
 
         if (first)
         {
             fifaIDsRes = fifaIds, first = false;
             continue;
         }
+
         std::vector<uint32_t> newfifaIDsRes;
         std::set_intersection(fifaIds.begin(), fifaIds.end(),
                               fifaIDsRes.begin(), fifaIDsRes.end(),
