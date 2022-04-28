@@ -127,13 +127,13 @@ void Database::fillTablePositions()
     playersFile.close();
 }
 
-std::vector<PlayerSearch> Database::playersSearch(std::string str)
+std::vector<BasePlayerSearch> Database::playersSearch(std::string str)
 {
     Timer timer("PlayerSearch");
 
     auto fifaIds = this->namesTree.search(misc::toLower(str));
 
-    std::vector<PlayerSearch> res;
+    std::vector<BasePlayerSearch> res;
 
     for (auto &&id : fifaIds)
     {
@@ -144,7 +144,7 @@ std::vector<PlayerSearch> Database::playersSearch(std::string str)
         if (!playerFound || !playerRatingFound)
             throw;
 
-        res.emplace_back(PlayerSearch(player->second, playerRating->second));
+        res.emplace_back(BasePlayerSearch(player->second, playerRating->second));
     }
 
     return res;
@@ -182,7 +182,7 @@ std::vector<UserSearch> Database::userSearch(uint32_t id)
     return res;
 }
 
-std::vector<PositionSearch> Database::positionSearch(uint32_t topN, std::string position)
+std::vector<BasePlayerSearch> Database::positionSearch(uint32_t topN, std::string position)
 {
     Timer timer("PositionSearch");
     auto [positionIt, positionFound] = tablePositions.find(position);
@@ -191,7 +191,7 @@ std::vector<PositionSearch> Database::positionSearch(uint32_t topN, std::string 
         return {};
 
     auto &fifaIds = positionIt->second.fifaIDs.getOderedVector();
-    std::vector<PositionSearch> res;
+    std::vector<BasePlayerSearch> res;
     res.reserve(fifaIds.size() >= topN ? topN : fifaIds.size());
 
     int i = 0;
@@ -203,7 +203,7 @@ std::vector<PositionSearch> Database::positionSearch(uint32_t topN, std::string 
         if (!playerFound || !playerRatingFound)
             throw;
 
-        res.emplace_back(PositionSearch(player->second, playerRating->second));
+        res.emplace_back(BasePlayerSearch(player->second, playerRating->second));
 
         if (++i == topN)
             break;
@@ -212,7 +212,7 @@ std::vector<PositionSearch> Database::positionSearch(uint32_t topN, std::string 
     return res;
 }
 
-std::vector<TagsSearch> Database::tagsSearch(const std::vector<std::string> &tags)
+std::vector<BasePlayerSearch> Database::tagsSearch(const std::vector<std::string> &tags)
 {
     Timer timer("TagsSearch");
 
@@ -248,7 +248,7 @@ std::vector<TagsSearch> Database::tagsSearch(const std::vector<std::string> &tag
         fifaIDsRes = newfifaIDsRes;
     }
 
-    std::vector<TagsSearch> res;
+    std::vector<BasePlayerSearch> res;
     res.reserve(fifaIDsRes.size());
 
     for (auto &&id : fifaIDsRes)
@@ -260,7 +260,7 @@ std::vector<TagsSearch> Database::tagsSearch(const std::vector<std::string> &tag
         if (!playerFound || !playerRatingFound)
             throw;
 
-        res.emplace_back(TagsSearch(player->second, playerRating->second));
+        res.emplace_back(BasePlayerSearch(player->second, playerRating->second));
     }
 
     return res;

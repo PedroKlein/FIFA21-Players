@@ -1,8 +1,8 @@
 export const themes = {
   main: {
-    primary: "#ED1C24",
+    primary: "#4158d0",
     "primary-light": "#FF1E27",
-    "primary-dark": "#C7171E",
+    "primary-dark": "#4158d0",
     secondary: "#7D7D7D",
     "secondary-light": "#9E9E9E",
     "secondary-dark": "#575757",

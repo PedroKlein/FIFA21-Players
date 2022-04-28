@@ -45,7 +45,7 @@ public:
 
   // JSValue UI::GetData(const JSObject &obj, const JSArgs &args);
 
-  void OnRequestSearch(const JSObject &obj, const JSArgs &args);
+  JSValue OnRequestPlayerSearch(const JSObject &obj, const JSArgs &args);
 
 protected:
   Database &db;

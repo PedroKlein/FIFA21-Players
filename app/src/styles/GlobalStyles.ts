@@ -8,7 +8,7 @@ export default createGlobalStyle`
     box-sizing: border-box;
   }
   html {
-    min-height: 100%;
+    height: 100%;
     font-size: 62.5%;
     background: var(--dark-light);
     color: var(--light-white);
@@ -18,7 +18,7 @@ export default createGlobalStyle`
   }
   main{
     width:100%;
-    height: 100vh - 50px;
+    /* height: calc(100vh - 50px); */
     display: flex;
     justify-content:center ;
     align-items: center;
@@ -26,11 +26,20 @@ export default createGlobalStyle`
     padding: 2rem;
     /* max-width: 1400px; */
     margin: 0 auto;
+
     @media ${device.mobileL} {
       margin-bottom: 80px;
     }
   }
   body{
+    min-height: 100%;
+    width: 100%;
+    background: #c850c0;
+    background: -webkit-linear-gradient(45deg, #4158d0, #c850c0);
+    background: -o-linear-gradient(45deg, #4158d0, #c850c0);
+    background: -moz-linear-gradient(45deg, #4158d0, #c850c0);
+    background: linear-gradient(45deg, #4158d0, #c850c0);
+
     font-size: 1.6rem;
     &::-webkit-scrollbar{
       width: 0.5rem;

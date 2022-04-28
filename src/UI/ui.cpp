@@ -118,7 +118,7 @@ void UI::OnDOMReady(ultralight::View *caller)
   JSObject global = JSGlobalObject();
 
   // global["GetData"] = BindJSCallbackWithRetval(&UI::GetData);
-  global["OnRequestSearch"] = BindJSCallback(&UI::OnRequestSearch);
+  global["OnRequestPlayerSearch"] = BindJSCallbackWithRetval(&UI::OnRequestPlayerSearch);
 }
 
 void UI::OnChangeCursor(ultralight::View *caller,
@@ -148,12 +148,19 @@ void UI::OnChangeTitle(ultralight::View *caller,
 //   return data.toJsObject(context_);
 // }
 
-void UI::OnRequestSearch(const JSObject &obj, const JSArgs &args)
+JSValue UI::OnRequestPlayerSearch(const JSObject &obj, const JSArgs &args)
 {
-  if (args.size() == 1)
+
+  ultralight::String search = args[0];
+  std::string cppString(search.utf8().data());
+  auto playersSearch = db.playersSearch(cppString);
+  JSArray res;
+  res.set_context(context_);
+
+  for (auto &&player : playersSearch)
   {
-    ultralight::String search = args[0];
-    std::string cppString(search.utf8().data());
-    auto res = db.playersSearch(cppString);
+    res.push((JSValue)player.toJsObject(context_));
   }
+
+  return res;
 }
