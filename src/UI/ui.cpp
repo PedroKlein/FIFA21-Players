@@ -118,7 +118,7 @@ void UI::OnDOMReady(ultralight::View *caller)
   JSObject global = JSGlobalObject();
 
   // global["GetData"] = BindJSCallbackWithRetval(&UI::GetData);
-  global["OnRequestPlayerSearch"] = BindJSCallbackWithRetval(&UI::OnRequestPlayerSearch);
+  global["OnRequestPlayersSearch"] = BindJSCallbackWithRetval(&UI::OnRequestPlayersSearch);
 }
 
 void UI::OnChangeCursor(ultralight::View *caller,
@@ -148,7 +148,7 @@ void UI::OnChangeTitle(ultralight::View *caller,
 //   return data.toJsObject(context_);
 // }
 
-JSValue UI::OnRequestPlayerSearch(const JSObject &obj, const JSArgs &args)
+JSValue UI::OnRequestPlayersSearch(const JSObject &obj, const JSArgs &args)
 {
 
   ultralight::String search = args[0];

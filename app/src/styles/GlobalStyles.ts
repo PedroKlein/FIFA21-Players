@@ -12,6 +12,7 @@ export default createGlobalStyle`
     font-size: 62.5%;
     background: var(--dark-light);
     color: var(--light-white);
+    scroll-behavior: smooth;
     @media ${device.mobileL} {
       font-size: 50%;
     }
@@ -19,9 +20,6 @@ export default createGlobalStyle`
   main{
     width:100%;
     /* height: calc(100vh - 50px); */
-    display: flex;
-    justify-content:center ;
-    align-items: center;
     margin-top: 50px; ;
     padding: 2rem;
     /* max-width: 1400px; */

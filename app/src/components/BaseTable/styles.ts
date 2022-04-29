@@ -1,7 +1,8 @@
 import styled from "styled-components";
 
 export const Table = styled.table`
-  width: 100%;
+  table-layout: fixed;
+  max-width: 100%;
   min-width: 500px;
   background: var(--light-white);
   border-collapse: collapse;
@@ -13,12 +14,13 @@ export const Table = styled.table`
     display: inline-table;
     width: 100%;
     tr {
+      text-align: left;
       height: 60px;
       background: #36304a;
     }
     th {
+      padding: 10px;
       font-size: 1.6rem;
-      line-height: 1.2;
       font-weight: unset;
     }
   }
@@ -26,17 +28,21 @@ export const Table = styled.table`
   tbody {
     display: block;
     overflow-y: scroll;
-    height: 300px;
+    height: 50vh;
+
     tr {
       height: 60px;
       font-size: 1.6rem;
       color: #808080;
-      line-height: 1.2;
       font-weight: unset;
-      text-align: center;
+      text-align: left;
 
       &:nth-child(even) {
         background-color: #f5f5f5;
+      }
+
+      td {
+        padding: 10px;
       }
     }
   }

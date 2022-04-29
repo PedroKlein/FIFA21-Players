@@ -1,6 +1,5 @@
-import styled from 'styled-components'
-import { device } from '../../@types/devices.types'
-
+import styled from "styled-components";
+import { device } from "../../@types/devices.types";
 
 export const Container = styled.div`
   position: relative;
@@ -14,7 +13,7 @@ export const Container = styled.div`
       top: 6px;
     }
   }
-  input[type='search'] {
+  input[type="search"] {
     appearance: text;
     box-sizing: content-box;
     font-family: inherit;
@@ -50,4 +49,4 @@ export const Container = styled.div`
       }
     }
   }
-`
+`;

@@ -6,6 +6,7 @@ import GlobalStyles from "./styles/GlobalStyles";
 import { ThemeName, themes, ThemeType } from "./styles/themes";
 import Home from "./views/Home";
 import PlayersSearch from "./views/PlayersSearch";
+import TagsSearch from "./views/TagsSearch";
 
 const App: React.FC = () => {
   const themeName: ThemeName = "main";
@@ -22,11 +23,15 @@ const App: React.FC = () => {
           <li>
             <Link to="/players">Players Search</Link>
           </li>
+          <li>
+            <Link to="/tags">Tags Search</Link>
+          </li>
         </NavBar>
         <main>
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/players" element={<PlayersSearch />} />
+            <Route path="/tags" element={<TagsSearch />} />
           </Routes>
         </main>
       </BrowserRouter>
