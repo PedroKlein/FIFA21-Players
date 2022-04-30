@@ -8,12 +8,12 @@ export const Container = styled.div`
     left: 15px;
     top: 3px;
     cursor: pointer;
-    @media ${device.tablet} {
+    /* @media ${device.tablet} {
       left: 17px;
       top: 6px;
-    }
+    } */
   }
-  input[type="search"] {
+  input {
     appearance: text;
     box-sizing: content-box;
     font-family: inherit;
@@ -28,7 +28,7 @@ export const Container = styled.div`
     padding: 5px 10px 5px 32px;
     border-radius: 10em;
     transition: all 0.5s;
-    @media ${device.tablet} {
+    /* @media ${device.tablet} {
       padding: 9px 10px 9px 32px;
       width: 15px;
       padding-left: 10px;
@@ -47,6 +47,6 @@ export const Container = styled.div`
       &::placeholder {
         color: transparent;
       }
-    }
+    } */
   }
 `;

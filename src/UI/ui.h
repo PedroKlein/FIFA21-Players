@@ -43,9 +43,8 @@ public:
   virtual void OnChangeTitle(ultralight::View *caller,
                              const String &title) override;
 
-  // JSValue UI::GetData(const JSObject &obj, const JSArgs &args);
-
   JSValue OnRequestPlayersSearch(const JSObject &obj, const JSArgs &args);
+  JSValue OnRequestTagsSearch(const JSObject &obj, const JSArgs &args);
 
 protected:
   Database &db;

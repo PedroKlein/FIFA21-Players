@@ -16,7 +16,7 @@ export const Table = styled.table`
     tr {
       text-align: left;
       height: 60px;
-      background: #36304a;
+      background: var(--secondary);
     }
     th {
       padding: 10px;

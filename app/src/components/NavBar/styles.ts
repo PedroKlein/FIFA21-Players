@@ -2,10 +2,10 @@ import styled from "styled-components";
 
 export const Container = styled.nav`
   overflow: hidden;
-  background-color: #333;
+  background-color: var(--secondary);
   position: sticky;
   top: 0;
-  z-index: 2 ;
+  z-index: 2;
   width: 100%;
   height: 50px;
   ul {
@@ -15,10 +15,11 @@ export const Container = styled.nav`
       display: inline;
       font-size: 17px;
       a {
-        color: #f2f2f2;
+        color: var(--light-white);
         padding: 14px;
+        border-radius: 10px;
         &:hover {
-          background-color: #111;
+          background-color: var(--dark-light);
         }
       }
     }

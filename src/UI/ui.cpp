@@ -117,8 +117,8 @@ void UI::OnDOMReady(ultralight::View *caller)
 
   JSObject global = JSGlobalObject();
 
-  // global["GetData"] = BindJSCallbackWithRetval(&UI::GetData);
   global["OnRequestPlayersSearch"] = BindJSCallbackWithRetval(&UI::OnRequestPlayersSearch);
+  global["OnRequestTagsSearch"] = BindJSCallbackWithRetval(&UI::OnRequestTagsSearch);
 }
 
 void UI::OnChangeCursor(ultralight::View *caller,
@@ -143,11 +143,6 @@ void UI::OnChangeTitle(ultralight::View *caller,
   window_->SetTitle(title.utf8().data());
 }
 
-// JSValue UI::GetData(const JSObject &obj, const JSArgs &args)
-// {
-//   return data.toJsObject(context_);
-// }
-
 JSValue UI::OnRequestPlayersSearch(const JSObject &obj, const JSArgs &args)
 {
 
@@ -158,6 +153,30 @@ JSValue UI::OnRequestPlayersSearch(const JSObject &obj, const JSArgs &args)
   res.set_context(context_);
 
   for (auto &&player : playersSearch)
+  {
+    res.push((JSValue)player.toJsObject(context_));
+  }
+
+  return res;
+}
+
+JSValue UI::OnRequestTagsSearch(const JSObject &obj, const JSArgs &args)
+{
+
+  JSArray tags = args[0];
+  std::vector<std::string> tagsCPP;
+
+  for (size_t i = 0; i < tags.length(); i++)
+  {
+    ultralight::String tag = tags[i];
+    tagsCPP.push_back(std::string(tag.utf8().data()));
+  }
+
+  auto tagsSearch = db.tagsSearch(tagsCPP);
+  JSArray res;
+  res.set_context(context_);
+
+  for (auto &&player : tagsSearch)
   {
     res.push((JSValue)player.toJsObject(context_));
   }

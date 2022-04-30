@@ -92,6 +92,7 @@ const PlayersSearch: React.FC = () => {
           aria-label="search bar"
         />
         <SearchBar
+          type={"search"}
           placeholder="search..."
           onChange={handleChange}
           minLength={3}

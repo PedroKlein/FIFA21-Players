@@ -1,4 +1,5 @@
 import { DetailedHTMLProps, forwardRef, InputHTMLAttributes } from "react";
+import { BsSearch } from 'react-icons/bs'
 import { Container } from "./styles";
 
 const SearchBar: React.ForwardRefRenderFunction<
@@ -8,7 +9,7 @@ const SearchBar: React.ForwardRefRenderFunction<
   return (
     <Container>
       <label htmlFor={rest.id || "search"}>
-        <svg
+        {/* <svg
           xmlns="http://www.w3.org/2000/svg"
           width="20"
           height="20"
@@ -22,9 +23,10 @@ const SearchBar: React.ForwardRefRenderFunction<
             stroke="var(--secondary-dark)"
             d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
           />
-        </svg>
+        </svg> */}
+        <BsSearch color="var(--secondary-dark)" size={20} title="search" />
       </label>
-      <input type="search" {...rest} ref={ref} />
+      <input {...rest} ref={ref} />
     </Container>
   );
 };
