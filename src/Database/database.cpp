@@ -187,7 +187,7 @@ std::vector<BasePlayerSearch> Database::positionSearch(uint32_t topN, std::strin
     Timer timer("PositionSearch");
     auto [positionIt, positionFound] = tablePositions.find(position);
 
-    if (!positionFound)
+    if (!positionFound || topN == 0)
         return {};
 
     auto &fifaIds = positionIt->second.fifaIDs.getOderedVector();

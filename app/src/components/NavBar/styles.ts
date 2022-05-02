@@ -20,9 +20,10 @@ interface IProps {
 export const Item = styled.li<IProps>`
   display: inline;
   font-size: 1.7rem;
+  margin-left: 2px;
   a {
     background-color: ${(props) =>
-      props.isActive ? "var(--secondary)" : "transparent"};
+      props.isActive ? "var(--primary)" : "transparent"};
     padding: 14px;
     border-radius: 10px;
     transition: 0.5s ease;

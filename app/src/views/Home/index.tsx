@@ -1,12 +1,13 @@
 import React from "react";
+import WrapView from "../../components/WrapView";
 
 
 const Home: React.FC = () => {
   return (
-    <div>
-      <h1>FIFA21-Players</h1>
-      <p></p>
-    </div>
+    <WrapView title="FIFA 21 - Players">
+
+    </WrapView>
+
   );
 };
 

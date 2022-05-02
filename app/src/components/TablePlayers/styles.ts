@@ -8,7 +8,7 @@ export const Container = styled.div`
     width: 300px;
   }
   #positions {
-    width: 100px;
+    width: 120px;
   }
   #rating {
     width: 100px;

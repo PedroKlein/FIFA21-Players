@@ -9,6 +9,7 @@ import Home from "./views/Home";
 import PlayersSearch from "./views/PlayersSearch";
 import UserSearch from "./views/UserSearch";
 import TagsSearch from "./views/TagsSearch";
+import PositionSearch from "./views/PositionSearch";
 
 const ROUTES: IRoutes[] = [
   {
@@ -17,19 +18,24 @@ const ROUTES: IRoutes[] = [
     component: <Home />,
   },
   {
-    title: "Players Search",
+    title: "Players",
     path: "/players",
     component: <PlayersSearch />,
   },
   {
-    title: "Tags Search",
-    path: "/tags",
-    component: <TagsSearch />,
-  },
-  {
-    title: "User Search",
+    title: "User",
     path: "/user",
     component: <UserSearch />,
+  },
+  {
+    title: "Position",
+    path: "/position",
+    component: <PositionSearch />,
+  },
+  {
+    title: "Tags",
+    path: "/tags",
+    component: <TagsSearch />,
   },
 ];
 
@@ -45,7 +51,11 @@ const App: React.FC = () => {
         <main>
           <Routes>
             {ROUTES.map((route) => (
-              <Route key={route.path} path={route.path} element={route.component} />
+              <Route
+                key={route.path}
+                path={route.path}
+                element={route.component}
+              />
             ))}
           </Routes>
         </main>

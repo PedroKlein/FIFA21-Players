@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Player } from "../../@types/player.types";
 import TablePlayers from "../../components/TablePlayers";
 import TagSearch from "../../components/TagSearch";
@@ -8,19 +8,14 @@ const TagsSearch: React.FC = () => {
   const [tags, setTags] = useState<string[]>([]);
   const [players, setPlayers] = useState<Player[]>([]);
 
-  function handleSubmit(event: React.FormEvent) {
-    event.preventDefault();
-
+  useEffect(() => {
     //@ts-ignore
     setPlayers(window["OnRequestTagsSearch"](tags));
-  }
+  }, [tags]);
 
   return (
     <WrapView title="Tags Search">
-      <form
-        onSubmit={handleSubmit}
-        style={{ marginBottom: "10px", width: "100%" }}
-      >
+      <form style={{ marginBottom: "10px", width: "100%" }}>
         <label
           id="lbl-search-header"
           htmlFor="headerSearch"

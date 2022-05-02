@@ -6,6 +6,7 @@ import { debounce } from "../../utils/debounce";
 import WrapView from "../../components/WrapView";
 import { UserRating } from "../../@types/userRating.types";
 import TableUserRatings from "../../components/TableUserRatings";
+import { isInteger } from "../../utils/isInteger";
 
 const USER_RATINGS_MOCK: UserRating[] = [
   {
@@ -22,19 +23,15 @@ const UserSearch: React.FC = () => {
   const [userRatings, setUserRatings] = useState<UserRating[]>([]);
 
   function handleChange(event: React.FormEvent<HTMLInputElement>): void {
-    if (isValidInput(event.currentTarget.value))
+    if (isInteger(event.currentTarget.value))
       setSearch(event.currentTarget.value);
   }
 
   function handleSubmit(event: React.FormEvent) {
     event.preventDefault();
-    if (isValidInput(search) && search.length > 0)
+    if (isInteger(search) && search.length > 0)
       //@ts-ignore
       setUserRatings(window["OnRequestUserSearch"](search));
-  }
-
-  function isValidInput(str: string): boolean {
-    return str.match(/\s*|^[0-9]\d*$/)?.length == 1;
   }
 
   return (

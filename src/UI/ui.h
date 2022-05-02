@@ -8,6 +8,9 @@
 
 using namespace ultralight;
 
+#define WINDOW_WIDTH 1280
+#define WINDOW_HEIGHT 720
+
 class UI : public AppListener,
            public WindowListener,
            public LoadListener,
@@ -45,6 +48,7 @@ public:
 
   JSValue OnRequestPlayersSearch(const JSObject &obj, const JSArgs &args);
   JSValue OnRequestUserSearch(const JSObject &obj, const JSArgs &args);
+  JSValue OnRequestPositionSearch(const JSObject &obj, const JSArgs &args);
   JSValue OnRequestTagsSearch(const JSObject &obj, const JSArgs &args);
 
 protected:

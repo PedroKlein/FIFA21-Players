@@ -1,15 +1,5 @@
 #include "ui.h"
 
-#define WINDOW_WIDTH 600
-#define WINDOW_HEIGHT 400
-
-struct BindingUI
-{
-  static JSValue GetMessage(JSObject &obj, const JSArgs &args);
-
-  static void OnRequestSearch(const JSObject &obj, const JSArgs &args);
-};
-
 UI::UI(Database &db)
     : db(db)
 {
@@ -119,6 +109,7 @@ void UI::OnDOMReady(ultralight::View *caller)
 
   global["OnRequestPlayersSearch"] = BindJSCallbackWithRetval(&UI::OnRequestPlayersSearch);
   global["OnRequestUserSearch"] = BindJSCallbackWithRetval(&UI::OnRequestUserSearch);
+  global["OnRequestPositionSearch"] = BindJSCallbackWithRetval(&UI::OnRequestPositionSearch);
   global["OnRequestTagsSearch"] = BindJSCallbackWithRetval(&UI::OnRequestTagsSearch);
 }
 
@@ -154,9 +145,7 @@ JSValue UI::OnRequestPlayersSearch(const JSObject &obj, const JSArgs &args)
   res.set_context(context_);
 
   for (auto &&player : playersSearch)
-  {
     res.push((JSValue)player.toJsObject(context_));
-  }
 
   return res;
 }
@@ -170,9 +159,24 @@ JSValue UI::OnRequestUserSearch(const JSObject &obj, const JSArgs &args)
   res.set_context(context_);
 
   for (auto &&player : usersSearch)
-  {
     res.push((JSValue)player.toJsObject(context_));
-  }
+
+  return res;
+}
+
+JSValue UI::OnRequestPositionSearch(const JSObject &obj, const JSArgs &args)
+{
+  ultralight::String topArg = args[0];
+  uint32_t topN = misc::atoui(topArg.utf8().data());
+  ultralight::String positionArg = args[1];
+  std::string position(positionArg.utf8().data());
+
+  auto positionSearch = db.positionSearch(topN, position);
+  JSArray res;
+  res.set_context(context_);
+
+  for (auto &&player : positionSearch)
+    res.push((JSValue)player.toJsObject(context_));
 
   return res;
 }
@@ -194,9 +198,7 @@ JSValue UI::OnRequestTagsSearch(const JSObject &obj, const JSArgs &args)
   res.set_context(context_);
 
   for (auto &&player : tagsSearch)
-  {
     res.push((JSValue)player.toJsObject(context_));
-  }
 
   return res;
 }
