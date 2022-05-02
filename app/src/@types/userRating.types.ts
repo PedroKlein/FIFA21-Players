@@ -1,8 +1,7 @@
 export interface UserRating {
-    fifaID: number;
-    name: string;
-    globalRating: string;
-    count: number;
-    rating: number;
-  }
-  
+  fifaID: number;
+  name: string;
+  globalRating: number;
+  count: number;
+  rating: number;
+}

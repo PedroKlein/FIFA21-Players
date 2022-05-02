@@ -118,6 +118,7 @@ void UI::OnDOMReady(ultralight::View *caller)
   JSObject global = JSGlobalObject();
 
   global["OnRequestPlayersSearch"] = BindJSCallbackWithRetval(&UI::OnRequestPlayersSearch);
+  global["OnRequestUserSearch"] = BindJSCallbackWithRetval(&UI::OnRequestUserSearch);
   global["OnRequestTagsSearch"] = BindJSCallbackWithRetval(&UI::OnRequestTagsSearch);
 }
 
@@ -153,6 +154,22 @@ JSValue UI::OnRequestPlayersSearch(const JSObject &obj, const JSArgs &args)
   res.set_context(context_);
 
   for (auto &&player : playersSearch)
+  {
+    res.push((JSValue)player.toJsObject(context_));
+  }
+
+  return res;
+}
+
+JSValue UI::OnRequestUserSearch(const JSObject &obj, const JSArgs &args)
+{
+  ultralight::String search = args[0];
+  uint32_t userID = misc::atoui(search.utf8().data());
+  auto usersSearch = db.userSearch(userID);
+  JSArray res;
+  res.set_context(context_);
+
+  for (auto &&player : usersSearch)
   {
     res.push((JSValue)player.toJsObject(context_));
   }

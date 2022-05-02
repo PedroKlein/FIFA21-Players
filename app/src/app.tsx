@@ -7,6 +7,7 @@ import GlobalStyles from "./styles/GlobalStyles";
 import { ThemeName, themes, ThemeType } from "./styles/themes";
 import Home from "./views/Home";
 import PlayersSearch from "./views/PlayersSearch";
+import UserSearch from "./views/UserSearch";
 import TagsSearch from "./views/TagsSearch";
 
 const ROUTES: IRoutes[] = [
@@ -25,6 +26,11 @@ const ROUTES: IRoutes[] = [
     path: "/tags",
     component: <TagsSearch />,
   },
+  {
+    title: "User Search",
+    path: "/user",
+    component: <UserSearch />,
+  },
 ];
 
 const App: React.FC = () => {
@@ -39,7 +45,7 @@ const App: React.FC = () => {
         <main>
           <Routes>
             {ROUTES.map((route) => (
-              <Route path={route.path} element={route.component} />
+              <Route key={route.path} path={route.path} element={route.component} />
             ))}
           </Routes>
         </main>

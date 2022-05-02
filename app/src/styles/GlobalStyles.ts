@@ -32,11 +32,8 @@ export default createGlobalStyle`
   body{
     min-height: 100%;
     width: 100%;
-    background: #c850c0;
-    background: -webkit-linear-gradient(45deg, #4158d0, #c850c0);
-    background: -o-linear-gradient(45deg, #4158d0, #c850c0);
-    background: -moz-linear-gradient(45deg, #4158d0, #c850c0);
-    background: linear-gradient(45deg, #4158d0, #c850c0);
+    background: var(--primary);
+    background: linear-gradient(45deg, var(--primary), var(--secondary));
 
     font-size: 1.6rem;
     &::-webkit-scrollbar{

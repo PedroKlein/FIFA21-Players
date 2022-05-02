@@ -44,6 +44,7 @@ public:
                              const String &title) override;
 
   JSValue OnRequestPlayersSearch(const JSObject &obj, const JSArgs &args);
+  JSValue OnRequestUserSearch(const JSObject &obj, const JSArgs &args);
   JSValue OnRequestTagsSearch(const JSObject &obj, const JSArgs &args);
 
 protected:

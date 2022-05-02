@@ -156,7 +156,7 @@ std::vector<UserSearch> Database::userSearch(uint32_t id)
     auto [user, userFound] = tableUserRatings.find(id);
 
     if (!userFound)
-        throw;
+        return {};
 
     auto &ratings = user->second.ratings;
     std::vector<UserSearch> res;

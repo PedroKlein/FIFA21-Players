@@ -12,7 +12,7 @@ const NavBar: React.FC<IProps> = ({ routes }) => {
     <Container>
       <ul>
         {routes.map((route) => (
-          <Item isActive={location.pathname == route.path}>
+          <Item key={route.path} isActive={location.pathname == route.path}>
             <Link to={route.path}>{route.title}</Link>
           </Item>
         ))}
