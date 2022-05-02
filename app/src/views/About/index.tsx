@@ -2,13 +2,12 @@ import React from "react";
 import WrapView from "../../components/WrapView";
 
 
-const Home: React.FC = () => {
+const About: React.FC = () => {
   return (
     <WrapView title="FIFA 21 - Players">
-
+      <p>Created by Henrique Utzig and Pedro Klein</p>
     </WrapView>
-
   );
 };
 
-export default Home;
+export default About;

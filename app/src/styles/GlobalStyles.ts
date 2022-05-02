@@ -48,7 +48,7 @@ export default createGlobalStyle`
     }
   }
   p{
-    color: var(--dark-light);
+    color: var(--light-dark);
   }
   *, button, input {
     font-family: Roboto;

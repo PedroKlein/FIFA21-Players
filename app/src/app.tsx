@@ -5,7 +5,7 @@ import { IRoutes } from "./@types/routes.types";
 import NavBar from "./components/NavBar";
 import GlobalStyles from "./styles/GlobalStyles";
 import { ThemeName, themes, ThemeType } from "./styles/themes";
-import Home from "./views/Home";
+import About from "./views/About";
 import PlayersSearch from "./views/PlayersSearch";
 import UserSearch from "./views/UserSearch";
 import TagsSearch from "./views/TagsSearch";
@@ -13,9 +13,9 @@ import PositionSearch from "./views/PositionSearch";
 
 const ROUTES: IRoutes[] = [
   {
-    title: "Home",
+    title: "About",
     path: "/",
-    component: <Home />,
+    component: <About />,
   },
   {
     title: "Players",
