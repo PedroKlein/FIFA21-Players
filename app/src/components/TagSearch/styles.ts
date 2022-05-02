@@ -50,7 +50,7 @@ export const Tags = styled.div`
     display: flex;
     align-items: center;
     padding: 8px;
-    background: var(--secondary);
+    background: var(--dark);
     border-radius: 10px;
     margin-right: 8px;
 

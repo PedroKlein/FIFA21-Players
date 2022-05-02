@@ -2,7 +2,7 @@ import styled from "styled-components";
 
 export const Container = styled.nav`
   overflow: hidden;
-  background-color: var(--secondary);
+  background-color: var(--dark);
   position: sticky;
   top: 0;
   z-index: 2;
@@ -11,17 +11,23 @@ export const Container = styled.nav`
   ul {
     text-align: center;
     padding: 15px;
-    li {
-      display: inline;
-      font-size: 17px;
-      a {
-        color: var(--light-white);
-        padding: 14px;
-        border-radius: 10px;
-        &:hover {
-          background-color: var(--dark-light);
-        }
-      }
+  }
+`;
+
+interface IProps {
+  isActive?: boolean;
+}
+export const Item = styled.li<IProps>`
+  display: inline;
+  font-size: 1.7rem;
+  a {
+    background-color: ${(props) =>
+      props.isActive ? "var(--secondary)" : "transparent"};
+    padding: 14px;
+    border-radius: 10px;
+    transition: 0.5s ease;
+    &:hover {
+      background-color: var(--primary);
     }
   }
 `;

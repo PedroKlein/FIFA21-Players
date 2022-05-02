@@ -1,10 +1,22 @@
 import React from "react";
-import { Container } from "./styles";
+import { Link, useLocation } from "react-router-dom";
+import { IRoutes } from "../../@types/routes.types";
+import { Container, Item } from "./styles";
 
-const NavBar: React.FC = ({ children }) => {
+interface IProps {
+  routes: IRoutes[];
+}
+const NavBar: React.FC<IProps> = ({ routes }) => {
+  const location = useLocation();
   return (
     <Container>
-      <ul>{children}</ul>
+      <ul>
+        {routes.map((route) => (
+          <Item isActive={location.pathname == route.path}>
+            <Link to={route.path}>{route.title}</Link>
+          </Item>
+        ))}
+      </ul>
     </Container>
   );
 };

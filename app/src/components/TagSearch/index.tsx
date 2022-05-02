@@ -38,7 +38,7 @@ const TagSearch: React.FC<Props> = ({ tags, setTags, ...rest }) => {
     <Container>
       <Bar>
         <label htmlFor={rest.id || "search"}>
-          <BsSearch color="var(--secondary-dark)" size={20} title="search" />
+          <BsSearch color="var(--dark)" size={20} title="search" />
         </label>
         <input
           {...rest}

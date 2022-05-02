@@ -67,6 +67,12 @@ export default createGlobalStyle`
     }
     
   }
+  button{
+    transition: 0.25s ease;
+    &:hover{
+      filter: brightness(150%);
+    }
+  }
   ul {
     list-style: none;
   }
