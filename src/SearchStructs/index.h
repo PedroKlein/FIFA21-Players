@@ -1,4 +1,2 @@
-#include "./positionSearch.h"
-#include "./tagsSearch.h"
+#include "./basePlayerSearch.h"
 #include "./userSearch.h"
-#include "./playerSearch.h"

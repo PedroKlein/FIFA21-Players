@@ -44,10 +44,10 @@ public:
     Database();
     ~Database();
 
-    std::vector<PlayerSearch> playersSearch(std::string str);
+    std::vector<BasePlayerSearch> playersSearch(std::string str);
     std::vector<UserSearch> userSearch(uint32_t id);
-    std::vector<PositionSearch> positionSearch(uint32_t topN, std::string position);
-    std::vector<TagsSearch> tagsSearch(const std::vector<std::string> &Tags);
+    std::vector<BasePlayerSearch> positionSearch(uint32_t topN, std::string position);
+    std::vector<BasePlayerSearch> tagsSearch(const std::vector<std::string> &Tags);
 
 private:
     void readPlayersCSV();

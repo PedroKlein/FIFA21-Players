@@ -2,9 +2,11 @@ cmake_minimum_required(VERSION 3.0.0)
 
 project(FIFA21-Players VERSION 0.1.0 LANGUAGES CXX)
 
+include(cmake/App.cmake)
+
 FILE(GLOB_RECURSE SOURCES src/*)
 
-add_executable(${PROJECT_NAME} ${SOURCES})
+add_app("${SOURCES}")
 
 #           DOWNLOAD ALL THE SUBMODULES
 find_package(Git QUIET)
@@ -43,3 +45,4 @@ target_link_libraries(${PROJECT_NAME}
 )
 
 set_target_properties(${PROJECT_NAME} PROPERTIES CXX_STANDARD 17)
+

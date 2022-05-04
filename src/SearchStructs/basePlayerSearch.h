@@ -4,32 +4,33 @@
 #include <iostream>
 #include <AppCore/JSHelpers.h>
 #include "../Structs/players.h"
-#include "../Structs/user.h"
 
-struct UserSearch
+using namespace ultralight;
+
+struct BasePlayerSearch
 {
     uint32_t fifaID;
     std::string name;
-    float globalRating;
-    size_t count;
+    std::string playerPosition;
     float rating;
+    size_t count;
 
-    UserSearch(){};
+    BasePlayerSearch(){};
 
-    UserSearch(const Player &player, const PlayerRating &playerRating, float userRating)
+    BasePlayerSearch(const Player &player, const PlayerRating &playerRating)
         : fifaID(player.fifaID),
           name(player.name),
-          globalRating(playerRating.rating),
-          count(playerRating.count),
-          rating(userRating){};
+          playerPosition(player.positions),
+          rating(playerRating.rating),
+          count(playerRating.count){};
 
-    friend std::ostream &operator<<(std::ostream &out, const UserSearch &c)
+    friend std::ostream &operator<<(std::ostream &out, const BasePlayerSearch &c)
     {
         out << c.fifaID << " "
             << c.name << " "
-            << c.globalRating << " "
-            << c.count << " "
-            << c.rating << std::endl;
+            << c.playerPosition << " "
+            << c.rating << " "
+            << c.count << std::endl;
         return out;
     }
 
@@ -38,9 +39,9 @@ struct UserSearch
         JSObject res;
         JSObjectSetProperty(context, res, JSStringCreateWithUTF8CString("fifaID"), JSValue(fifaID), NULL, NULL);
         JSObjectSetProperty(context, res, JSStringCreateWithUTF8CString("name"), JSValue(name.c_str()), NULL, NULL);
-        JSObjectSetProperty(context, res, JSStringCreateWithUTF8CString("globalRating"), JSValue(globalRating), NULL, NULL);
-        JSObjectSetProperty(context, res, JSStringCreateWithUTF8CString("count"), JSValue(count), NULL, NULL);
+        JSObjectSetProperty(context, res, JSStringCreateWithUTF8CString("positions"), JSValue(playerPosition.c_str()), NULL, NULL);
         JSObjectSetProperty(context, res, JSStringCreateWithUTF8CString("rating"), JSValue(rating), NULL, NULL);
+        JSObjectSetProperty(context, res, JSStringCreateWithUTF8CString("count"), JSValue(count), NULL, NULL);
         return res;
     }
 };
