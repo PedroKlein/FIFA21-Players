@@ -1,42 +1,28 @@
-import React, { useCallback, useEffect, useState } from "react";
-import { Player } from "../../@types/player.types";
+import React, { useEffect, useState } from "react";
 import SearchBar from "../../components/SearchBar";
-import TablePlayers from "../../components/TablePlayers";
-import { debounce } from "../../utils/debounce";
 import WrapView from "../../components/WrapView";
 import { UserRating } from "../../@types/userRating.types";
 import TableUserRatings from "../../components/TableUserRatings";
 import { isInteger } from "../../utils/isInteger";
-
-const USER_RATINGS_MOCK: UserRating[] = [
-  {
-    fifaID: 132123,
-    name: "Pedro Klein",
-    globalRating: 2.43533523523542,
-    rating: 4.77,
-    count: 2000,
-  },
-];
+import { CppBindings } from "../../@types/bindings.types";
 
 const UserSearch: React.FC = () => {
-  const [search, setSearch] = useState("");
+  const [userID, setUserID] = useState("");
   const [userRatings, setUserRatings] = useState<UserRating[]>([]);
+
+  useEffect(() => {
+    if (isInteger(userID) && userID.length > 0)
+      setUserRatings(CppBindings.onRequestUserSearch(userID));
+  }, [userID]);
 
   function handleChange(event: React.FormEvent<HTMLInputElement>): void {
     if (isInteger(event.currentTarget.value))
-      setSearch(event.currentTarget.value);
-  }
-
-  function handleSubmit(event: React.FormEvent) {
-    event.preventDefault();
-    if (isInteger(search) && search.length > 0)
-      //@ts-ignore
-      setUserRatings(window["OnRequestUserSearch"](search));
+      setUserID(event.currentTarget.value);
   }
 
   return (
     <WrapView title="User Search">
-      <form onSubmit={handleSubmit} style={{ marginBottom: "10px" }}>
+      <form style={{ marginBottom: "10px" }}>
         <label
           id="lbl-search-header"
           htmlFor="headerSearch"
@@ -47,7 +33,7 @@ const UserSearch: React.FC = () => {
           placeholder="search by userID..."
           min={0}
           step={1}
-          value={search}
+          value={userID}
           onChange={handleChange}
           autoComplete="off"
           id="headerSearch"

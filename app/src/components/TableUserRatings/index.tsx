@@ -1,5 +1,4 @@
 import React from "react";
-import { Player } from "../../@types/player.types";
 import { UserRating } from "../../@types/userRating.types";
 import BaseTable from "../BaseTable";
 import { Container } from "./styles";

@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { CppBindings } from "../../@types/bindings.types";
 import { Player } from "../../@types/player.types";
 import TablePlayers from "../../components/TablePlayers";
 import TagSearch from "../../components/TagSearch";
@@ -9,8 +10,7 @@ const TagsSearch: React.FC = () => {
   const [players, setPlayers] = useState<Player[]>([]);
 
   useEffect(() => {
-    //@ts-ignore
-    setPlayers(window["OnRequestTagsSearch"](tags));
+    setPlayers(CppBindings.onRequestTagsSearch(tags));
   }, [tags]);
 
   return (

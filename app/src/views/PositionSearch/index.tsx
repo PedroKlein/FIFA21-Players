@@ -6,6 +6,7 @@ import { debounce } from "../../utils/debounce";
 import WrapView from "../../components/WrapView";
 import styled from "styled-components";
 import { isInteger } from "../../utils/isInteger";
+import { CppBindings } from "../../@types/bindings.types";
 
 const Form = styled.form`
   display: flex;
@@ -32,15 +33,15 @@ const Form = styled.form`
 `;
 
 const PositionSearch: React.FC = () => {
-  const [search, setSearch] = useState("");
+  const [position, setPosition] = useState("");
   const [topN, setTopN] = useState("20");
   const [players, setPlayers] = useState<Player[]>([]);
 
   useEffect(() => {
-    if (search.length < 2 || topN.length == 0) return;
-    //@ts-ignore
-    setPlayers(window["OnRequestPositionSearch"](topN, search));
-  }, [search, topN]);
+    if (position.length < 2 || topN.length == 0) return;
+
+    setPlayers(CppBindings.onRequestPositionSearch(topN, position));
+  }, [position, topN]);
 
   function handleChangeTopN(event: React.FormEvent<HTMLInputElement>): void {
     if (
@@ -51,7 +52,7 @@ const PositionSearch: React.FC = () => {
   }
 
   const debouncedSearch = useCallback(
-    debounce((nextValue: string) => setSearch(nextValue), 20),
+    debounce((nextValue: string) => setPosition(nextValue), 20),
     []
   );
 

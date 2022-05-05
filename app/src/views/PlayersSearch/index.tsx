@@ -4,6 +4,7 @@ import SearchBar from "../../components/SearchBar";
 import TablePlayers from "../../components/TablePlayers";
 import { debounce } from "../../utils/debounce";
 import WrapView from "../../components/WrapView";
+import { CppBindings } from "../../@types/bindings.types";
 
 const PlayersSearch: React.FC = () => {
   const [search, setSearch] = useState("");
@@ -11,8 +12,7 @@ const PlayersSearch: React.FC = () => {
 
   useEffect(() => {
     if (search.length < 3) return;
-    //@ts-ignore
-    setPlayers(window["OnRequestPlayersSearch"](search));
+    setPlayers(CppBindings.onRequestPlayersSearch(search));
   }, [search]);
 
   const debouncedSearch = useCallback(
@@ -24,13 +24,9 @@ const PlayersSearch: React.FC = () => {
     debouncedSearch(event.currentTarget.value);
   }
 
-  function handleSubmit(event: React.FormEvent) {
-    event.preventDefault();
-  }
-
   return (
     <WrapView title="Players Search">
-      <form onSubmit={handleSubmit} style={{ marginBottom: "10px" }}>
+      <form style={{ marginBottom: "10px" }}>
         <label
           id="lbl-search-header"
           htmlFor="headerSearch"

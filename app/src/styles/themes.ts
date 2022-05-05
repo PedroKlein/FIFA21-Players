@@ -1,7 +1,7 @@
 export const themes = {
   main: {
     primary: "#4158d0",
-    "primary-light": "#FF1E27",
+    "primary-light": "#4158d0",
     "primary-dark": "#4158d0",
     secondary: "#c850c0",
     "secondary-light": "#9E9E9E",
@@ -18,8 +18,6 @@ export const themes = {
   },
 };
 
-// #28a745
-//#17a2b8
 
 export type ThemeName = keyof typeof themes;
 export type ThemeType = typeof themes.main;
